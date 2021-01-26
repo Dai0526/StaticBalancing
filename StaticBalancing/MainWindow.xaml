@@ -5,8 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StaticBalancing"
         mc:Ignorable="d"
-        Title="Static Balancing" Height="600" Width="600">
-    <Grid>
+        Title="Static Balancing" Height="720" Width="650">
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "20*"/>
+            <RowDefinition Height = "450*"/>
+            <RowDefinition Height = "250*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Name= "MenuGrid" Grid.Row="0">
+            <DockPanel Name="MenuPanel"  VerticalAlignment="Stretch">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File"></MenuItem>
+                    <MenuItem Header="_Help"></MenuItem>
+                </Menu>
+            </DockPanel>
+        </Grid>
+        
+        <Grid Name="SystemGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450*"/>
+                <ColumnDefinition Width="200*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Name="SystemInfoGrid" Grid.Column="0">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+            </Grid>
+            <Grid Name="CalibrationGrid" Grid.Column="1">
+
+            </Grid>
+        </Grid>
+        
+        <Grid Name="BalanceGrid" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="40*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Name="BalanceLogGrid" Grid.Row="0">
+                
+            </Grid>
+            <Grid Name="BalanceResultGrid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="450*"/>
+                    <ColumnDefinition Width="200*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Name="BalanceSinusoidGrid" Grid.Column="0">
+                    
+                </Grid>
+                <Grid Name="BalanceStatsGrid" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="37*"/>
+                        <ColumnDefinition Width="160*"/>
+                    </Grid.ColumnDefinitions>
+
+                </Grid>
+            </Grid>
+
+        </Grid>
+        
         
     </Grid>
 </Window>
