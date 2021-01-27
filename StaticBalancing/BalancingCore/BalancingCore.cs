@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace StaticBalancing.BalancingCore
 {
@@ -13,7 +12,8 @@ namespace StaticBalancing.BalancingCore
     {
 
         #region Member
-        public Dictionary<string, SystemInfo> m_systemCollection;
+        public Dictionary<string, SystemInfo> m_systemArchives;
+        public SystemInfo m_systemSelected = null;
         #endregion
 
 
@@ -25,15 +25,13 @@ namespace StaticBalancing.BalancingCore
         // Load System Info
         public void LoadSystemInfos()
         {
-            m_systemCollection = new Dictionary<string, SystemInfo>();
-
-
+            m_systemArchives = new Dictionary<string, SystemInfo>();
 
         }
 
         public bool ReadSystemInfoFiles(string path)
         {
-            m_systemCollection = new Dictionary<string, SystemInfo>();
+            m_systemArchives = new Dictionary<string, SystemInfo>();
 
             XmlDocument xdc = new XmlDocument();
             xdc.Load(path);
@@ -74,7 +72,7 @@ namespace StaticBalancing.BalancingCore
                     si.m_counters.Add(ctr);
                 }
 
-                m_systemCollection[si.m_model] = si;
+                m_systemArchives[si.m_model] = si;
 
             }
 
@@ -94,6 +92,22 @@ namespace StaticBalancing.BalancingCore
                 default:
                     return SystemInfo.StackDirection.UNKNOWN;
             }
+        }
+
+        public void SetCurrentSystem(string model, string serial = "")
+        {
+            if (!m_systemArchives.ContainsKey(model))
+            {
+                throw new Exception("Error: Target model " + model + " not found.");
+            }
+
+            m_systemSelected = m_systemArchives[model];
+            m_systemSelected.m_serialNumber = serial;
+        }
+
+        public SystemInfo GetCurrentSystem()
+        {
+            return m_systemSelected;
         }
 
         // for rnd use

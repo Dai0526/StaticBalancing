@@ -24,5 +24,15 @@ namespace StaticBalancing
         {
             InitializeComponent();
         }
+
+        private void ConfigFilePathTextbox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            // TODO: Windows File Explore browser to choose system configuration
+        }
+
+        private void SystemSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: pop up a windows, display info from the configuraiton file, and let user to select target system and enter serial numbers
+        }
     }
 }
