@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace StaticBalancing.BalancingCore
+namespace StaticBalancing
 {
     public class BalancingCore
     {
@@ -51,7 +51,7 @@ namespace StaticBalancing.BalancingCore
                 XmlNodeList bpNodes = node.SelectNodes("BalancePositionList/position");
                 foreach(XmlNode bps in bpNodes)
                 {
-                    SystemInfo.BalancePosition pos = new SystemInfo.BalancePosition();
+                    BalancePosition pos = new BalancePosition();
                     pos.ID = Convert.ToString(bps.Attributes["id"].Value);
                     pos.Radius = float.Parse(bps.Attributes["radius"].Value);
                     pos.Angle = float.Parse(bps.Attributes["angle"].Value);
@@ -64,7 +64,7 @@ namespace StaticBalancing.BalancingCore
                 XmlNodeList ctNodes = node.SelectNodes("CounterTypeList/counter");
                 foreach (XmlNode cts in ctNodes)
                 {
-                    SystemInfo.Counter ctr = new SystemInfo.Counter();
+                    Counter ctr = new Counter();
                     ctr.PartNumber = Convert.ToString(cts.Attributes["pn"].Value);
                     ctr.Mass = float.Parse(cts.Attributes["mass"].Value);
                     ctr.Thickness = float.Parse(cts.Attributes["thickness"].Value);
@@ -79,18 +79,18 @@ namespace StaticBalancing.BalancingCore
             return true;
         }
 
-        private SystemInfo.StackDirection GetStackDirection(string s)
+        private StackDirection GetStackDirection(string s)
         {
             switch (s)
             {
                 case "Axial":
-                    return SystemInfo.StackDirection.AXIAL;
+                    return StackDirection.AXIAL;
                 case "Radial-":
-                    return SystemInfo.StackDirection.RADIAL_NEG;
+                    return StackDirection.RADIAL_NEG;
                 case "Radial+":
-                    return SystemInfo.StackDirection.RADIAL_POS;
+                    return StackDirection.RADIAL_POS;
                 default:
-                    return SystemInfo.StackDirection.UNKNOWN;
+                    return StackDirection.UNKNOWN;
             }
         }
 
@@ -117,7 +117,10 @@ namespace StaticBalancing.BalancingCore
         }
 
         // Load Data
+        public void LoadBalancingData()
+        {
 
+        }
 
         // Process Data
 

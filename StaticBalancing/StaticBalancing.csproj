@@ -65,6 +65,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BalancingCore\BalancingCore.cs" />
+    <Compile Include="BalancingCore\DataHandler.cs" />
+    <Compile Include="BalancingCore\Interface.cs" />
     <Compile Include="BalancingCore\SystemInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
