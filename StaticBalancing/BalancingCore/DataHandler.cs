@@ -153,7 +153,6 @@ namespace StaticBalancing
                 
                 Solve for x = -(M^-1)*b
          */
-
         #endregion
 
     }

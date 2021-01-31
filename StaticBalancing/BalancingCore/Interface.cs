@@ -64,4 +64,13 @@ namespace StaticBalancing
 
     #endregion
 
+    #region Arithmetic
+    public struct SineRegCoef
+    {
+        public double A;
+        public double B;
+    }
+
+    #endregion
+
 }
