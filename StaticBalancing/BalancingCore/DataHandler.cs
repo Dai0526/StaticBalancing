@@ -12,7 +12,7 @@ namespace StaticBalancing
 
         #region Load Raw data from file
 
-        public List<InputRaw> LoadData(string path)
+        public InputRaw LoadData(string path)
         {
             if (!File.Exists(path))
             {
@@ -29,17 +29,20 @@ namespace StaticBalancing
                 case ".txt":
                     return LoadDataFromTXT(path);
                 default:
-                    return new List<InputRaw>();
+                    return new InputRaw();
             }
 
         }
 
-        public List<InputRaw> LoadDataFromCSV(string file)
+        public InputRaw LoadDataFromCSV(string file)
         {
             int nLine = 0;
             string line;
 
-            List<InputRaw> data = new List<InputRaw>();
+            InputRaw data = new InputRaw();
+            data.Speed = new List<double>();
+            data.Position = new List<double>();
+
             StreamReader csvReader = new StreamReader(file);
 
             while ((line = csvReader.ReadLine()) != null)
@@ -56,24 +59,25 @@ namespace StaticBalancing
                     throw new Exception("Input Data Corrupted. Check File " + file + " at Line " + nLine);
                 }
 
-                InputRaw record = new InputRaw();
-                record.Timestamp = items[0];              //Time[ms]
-                record.PosDeg = float.Parse(items[1]);    //PL.CMD([Axis1] Position command)[deg]
-                record.SpdRpM = float.Parse(items[3]);    // VL.FBFILTER([Axis1] Velocity feedback filter)[rpm]
-
-                data.Add(record);
+                data.Position.Add(double.Parse(items[1]));    //PL.CMD([Axis1] Position command)[deg]
+                data.Speed.Add(double.Parse(items[3]));    // VL.FBFILTER([Axis1] Velocity feedback filter)[rpm]
                 ++nLine;
             }
+
+            data.Count = nLine;
 
             return data;
         }
 
-        public List<InputRaw> LoadDataFromTXT(string file)
+        public InputRaw LoadDataFromTXT(string file)
         {
             int nLine = 0;
             string line;
 
-            List<InputRaw> data = new List<InputRaw>();
+            InputRaw data = new InputRaw();
+            data.Speed = new List<double>();
+            data.Position = new List<double>();
+
             StreamReader csvReader = new StreamReader(file);
             char[] delimeter = new char[2];
             delimeter[0] = ',';
@@ -88,20 +92,16 @@ namespace StaticBalancing
                     throw new Exception("Input Data Corrupted. Check File " + file + " at Line " + nLine);
                 }
 
-                InputRaw record = new InputRaw();
-                record.Timestamp = items[1].TrimStart('0');              //Time[ms]
-                record.SpdRpM = float.Parse(items[5]);    //SP= 
-                record.PosDeg = float.Parse(items[10]);    // POS=
+                data.Position.Add(double.Parse(items[10]));  //POS=
+                data.Speed.Add(double.Parse(items[5]));     // SP= 
 
-                data.Add(record);
                 ++nLine;
             }
-
+            data.Count = nLine;
             return data;
         }
 
         #endregion
-
 
         #region Arithmetic
         /*
@@ -153,6 +153,12 @@ namespace StaticBalancing
                 
                 Solve for x = -(M^-1)*b
          */
+
+        //public void Calibrate(string baseRunFile, string counter1, string counter2)
+        //{
+            
+        //}
+
         #endregion
 
     }

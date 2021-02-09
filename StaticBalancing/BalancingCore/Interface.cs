@@ -39,16 +39,27 @@ namespace StaticBalancing
 
     public struct InputRaw
     {
-        public string Timestamp;
-        public float SpdRpM; // velocity feedback rpm
-        public float PosDeg; // pl.cmd [deg
+        public List<double> Speed;    // rpm - velocity feedback
+        public List<double> Position; // degree - pl.cmd
+        public int Count;
+
+        public InputRaw(int n = 0)
+        {
+            Count = n;
+            Speed = new List<double>();
+            Position = new List<double>();
+        }
 
         public override string ToString()
         {
-            string format = "Timestamp = {0}, Velocity(rpm) = {1}, Angle = {2}";
-
+            string format = "Velocity(rpm) = {0}, Angle = {1}\r\n";
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat(format, Timestamp, SpdRpM, PosDeg);
+
+            for (int i = 0; i < Speed.Count; ++i)
+            {
+                sb.AppendFormat(format, Speed[i], Position[i]);
+            }
+
             return sb.ToString();
         }
     }
@@ -69,6 +80,7 @@ namespace StaticBalancing
     {
         public double A;
         public double B;
+        public double C;
     }
 
     #endregion
