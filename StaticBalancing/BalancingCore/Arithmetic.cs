@@ -64,34 +64,6 @@ namespace StaticBalancing
             return coef;
         }
 
-        // Need improve
-        private double[] GetCos(List<double> vec)
-        {
-            int n = vec.Count;
-            double[] temp = new double[n];
-
-            for(int i = 0; i < n; ++i)
-            {
-                temp[i] = Math.Cos(vec[i]);
-            }
-
-            return temp;
-
-        }
-
-        // Need improve
-        private double[] GetSine(List<double> vec)
-        {
-            int n = vec.Count;
-            double[] temp = new double[n];
-
-            for (int i = 0; i < n; ++i)
-            {
-                temp[i] = Math.Sin(vec[i]);
-            }
-
-            return temp;
-        }
         // setep two: 
 
     }
