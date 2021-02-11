@@ -64,12 +64,10 @@ namespace StaticBalancing
                 XmlNodeList ctNodes = node.SelectNodes("CounterTypeList/counter");
                 foreach (XmlNode cts in ctNodes)
                 {
-                    Counter ctr = new Counter();
-                    ctr.PartNumber = Convert.ToString(cts.Attributes["pn"].Value);
-                    ctr.Mass = float.Parse(cts.Attributes["mass"].Value);
-                    ctr.Thickness = float.Parse(cts.Attributes["thickness"].Value);
-
-                    si.m_counters.Add(ctr);
+                    Counter ctr = new Counter(Convert.ToString(cts.Attributes["pn"].Value),
+                                                float.Parse(cts.Attributes["mass"].Value),
+                                                float.Parse(cts.Attributes["thickness"].Value));
+                    si.m_counters[ctr.PartNumber] = ctr;
                 }
 
                 m_systemArchives[si.m_model] = si;
