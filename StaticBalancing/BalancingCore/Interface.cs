@@ -40,10 +40,10 @@ namespace StaticBalancing
         public double GetWeight(Dictionary<string, Counter> counterSpec)
         {
             double weight = 0.0;
-
-            foreach(KeyValuePair<string, int> cntr in Counters)
+            int coef = StackDir == StackDirection.RADIAL_NEG ? -1 : 1;
+            foreach (KeyValuePair<string, int> cntr in Counters)
             {
-                weight += cntr.Value * counterSpec[cntr.Key].Mass;
+                weight += cntr.Value * counterSpec[cntr.Key].Mass * coef;
             }
 
             return weight;
@@ -56,13 +56,35 @@ namespace StaticBalancing
         
         public bool ValidateCounterSize(Dictionary<string, Counter> counterSpec)
         {
+            double length = GetCounterLength(counterSpec);
+            return length <= MaxStackHeight;
+        }
+
+        public double GetCounterLength(Dictionary<string, Counter> counterSpec)
+        {
             double length = 0.0;
             foreach (KeyValuePair<string, int> cntr in Counters)
             {
                 length += cntr.Value * counterSpec[cntr.Key].Thickness;
             }
 
-            return length <= MaxStackHeight;
+            return length;
+        }
+
+        public double GetActiveRadius(Dictionary<string, Counter> counterSpec)
+        {
+            double length = GetCounterLength(counterSpec);
+
+            switch (StackDir)
+            {
+                case StackDirection.RADIAL_NEG:
+                    return Radius - length;
+                case StackDirection.RADIAL_POS:
+                    return Radius + length;
+                case StackDirection.AXIAL:
+                default:
+                    return Radius;
+            }
         }
 
     }
@@ -144,7 +166,7 @@ namespace StaticBalancing
         public Dictionary<string, double> Imbalance;
 
         public double ResidualImblance;
-        public double ForceAt240rpm;
+        public double ForceAtMaxSpeed;
 
         public CalibrationResult(string id = "")
         {
@@ -156,7 +178,7 @@ namespace StaticBalancing
             Imbalance = new Dictionary<string, double>();
 
             ResidualImblance = 0.0;
-            ForceAt240rpm = 0.0;
+            ForceAtMaxSpeed = 0.0;
         }
 
     } 

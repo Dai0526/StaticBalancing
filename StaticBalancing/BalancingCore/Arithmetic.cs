@@ -57,7 +57,7 @@ namespace StaticBalancing
             x=-(M^-1)b
 
         */
-        public CalibrationResult GetCalibrationMatrix(SineRegCoef baseline, List<BalancePosition> bpList, SineRegCoef currStatus, Dictionary<string, Counter> counterSpec)
+        public CalibrationResult GetCalibrationMatrix(SineRegCoef baseline, List<BalancePosition> bpList, SineRegCoef currStatus, Dictionary<string, Counter> counterSpec, float maxSpeed)
         {
             // set up M
             List<double> dAs = new List<double>();
@@ -93,7 +93,7 @@ namespace StaticBalancing
                 item[bpList[i].ID] = ans[i];
             }
 
-            CalibrationResult result = new CalibrationResult();
+            CalibrationResult result = new CalibrationResult("Timestamp");
             result.Speed = GetSpeedRpm(currStatus);
             result.SpeedVariation = GetSpeedVariation(currStatus);
             result.Phase = GetPhaseDeg(currStatus);
@@ -105,14 +105,14 @@ namespace StaticBalancing
             }
 
             result.ResidualImblance = 0.0;
-            result.ForceAt240rpm = result.ResidualImblance  / 1000 * 25.1327411999999 * 25.1327411999999;
+            result.ForceAtMaxSpeed = result.ResidualImblance  / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
 
             return result;
         }
 
         public double GetPhaseDeg(SineRegCoef coef)
         {
-            double phase = Math.Tanh(coef.B/ coef.A);
+            double phase = Math.Atan2(coef.B, coef.A) / Math.PI * 180;
             return phase;
         }
 
