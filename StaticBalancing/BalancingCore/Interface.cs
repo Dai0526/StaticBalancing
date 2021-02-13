@@ -165,8 +165,8 @@ namespace StaticBalancing
         public Dictionary<string, double> WeightChange;
         public Dictionary<string, double> Imbalance;
 
-        public double ResidualImblance;
-        public double ForceAtMaxSpeed;
+        //public double ResidualImblance;
+        //public double ForceAtMaxSpeed;
 
         public CalibrationResult(string id = "")
         {
@@ -177,8 +177,8 @@ namespace StaticBalancing
             WeightChange = new Dictionary<string, double>();
             Imbalance = new Dictionary<string, double>();
 
-            ResidualImblance = 0.0;
-            ForceAtMaxSpeed = 0.0;
+            //ResidualImblance = 0.0;
+            //ForceAtMaxSpeed = 0.0;
         }
 
     } 

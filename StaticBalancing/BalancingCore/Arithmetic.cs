@@ -104,8 +104,8 @@ namespace StaticBalancing
                 result.Imbalance[bp.ID] = item[bp.ID] * bp.GetAppliedImbalance(counterSpec);
             }
 
-            result.ResidualImblance = 0.0;
-            result.ForceAtMaxSpeed = result.ResidualImblance  / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
+            //result.ResidualImblance = 0.0;
+            //result.ForceAtMaxSpeed = result.ResidualImblance  / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
 
             return result;
         }
