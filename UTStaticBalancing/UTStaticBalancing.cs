@@ -66,10 +66,14 @@ namespace UTStaticBalancing
             Left.ID = "5'0Clock";
             Left.Counters[cnt3241.PartNumber] = 2;
             Left.StackDir = StackDirection.RADIAL_NEG;
+            Left.Radius = 830.0F;
+
             BalancePosition Right = new BalancePosition("right");
             Right.ID = "7'0Clock";
             Right.Counters[cnt3241.PartNumber] = 2;
             Right.StackDir = StackDirection.RADIAL_NEG;
+            Right.Radius = 830.0F;
+
             DataHandler dh = new DataHandler();
             InputRaw raw = dh.LoadDataFromCSV(@"E:\Development\FMITools\StaticBalancing\reference\datasample\csv\00-0025,RDCT256-3,06MAR2020,Cal0.csv");
             InputRaw L = dh.LoadDataFromCSV(@"E:\Development\FMITools\StaticBalancing\reference\datasample\csv\00-0025,RDCT256-3,06MAR2020,CalL.csv");

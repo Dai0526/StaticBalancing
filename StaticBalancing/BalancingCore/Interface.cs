@@ -163,10 +163,10 @@ namespace StaticBalancing
         public double Phase;
 
         public Dictionary<string, double> WeightChange;
-        public Dictionary<string, double> Imbalance;
-
-        //public double ResidualImblance;
-        //public double ForceAtMaxSpeed;
+        //public Dictionary<string, double> Imbalance;
+        public Dictionary<string, ForceVector> ForceVectors;
+        public double ResidualImblance;
+        public double ForceAtMaxSpeed;
 
         public CalibrationResult(string id = "")
         {
@@ -175,13 +175,19 @@ namespace StaticBalancing
             SpeedVariation = 0.0;
             Phase = 0.0;
             WeightChange = new Dictionary<string, double>();
-            Imbalance = new Dictionary<string, double>();
-
-            //ResidualImblance = 0.0;
-            //ForceAtMaxSpeed = 0.0;
+            ForceVectors = new Dictionary<string, ForceVector>();
+            ResidualImblance = 0.0;
+            ForceAtMaxSpeed = 0.0;
         }
 
     } 
+
+    public struct ForceVector
+    {
+        public string ID;
+        public double Phase;
+        public double Imbalance;
+    }
 
     #endregion
 

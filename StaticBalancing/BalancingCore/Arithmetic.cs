@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearRegression;
 
 namespace StaticBalancing
@@ -13,7 +9,6 @@ namespace StaticBalancing
 
     public class Arithmetic
     {
-
         public Arithmetic()
         {
         }
@@ -43,7 +38,6 @@ namespace StaticBalancing
 
             return coef;
         }
-
 
         /*
         * Matrix M = 
@@ -86,7 +80,7 @@ namespace StaticBalancing
 
             double[] ans = x.ToColumnArrays()[0];
 
-            Dictionary<string, double> item = new Dictionary<string, double>(); ;
+            Dictionary<string, double> item = new Dictionary<string, double>();
 
             for(int i = 0; i < ans.Count(); ++i)
             {
@@ -100,12 +94,24 @@ namespace StaticBalancing
 
             foreach (BalancePosition bp in bpList)
             {
+                ForceVector fv = new ForceVector();
+                fv.ID = bp.ID;
+                fv.Imbalance = item[bp.ID] * bp.GetAppliedImbalance(counterSpec);
+
+                // get vector 
+                double diffA = bp.LastRunCoef.A - baseline.A;
+                double diffB = bp.LastRunCoef.B - baseline.B;
+                double angle = Math.Atan2(diffB, diffA);
+                fv.Phase = angle;
+
+                result.ForceVectors[bp.ID] = fv;
+
                 result.WeightChange[bp.ID] = item[bp.ID] * bp.GetWeight(counterSpec);
-                result.Imbalance[bp.ID] = item[bp.ID] * bp.GetAppliedImbalance(counterSpec);
             }
 
-            //result.ResidualImblance = 0.0;
-            //result.ForceAtMaxSpeed = result.ResidualImblance  / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
+            List<ForceVector> fvs = result.ForceVectors.Values.ToList();
+            result.ResidualImblance = GetResidualImbalance(fvs);
+            result.ForceAtMaxSpeed = result.ResidualImblance  / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
 
             return result;
         }
@@ -123,7 +129,7 @@ namespace StaticBalancing
 
         public double GetSpeedVariation(SineRegCoef coef)
         {
-            double speVar = 2 * Math.Sqrt(coef.A * coef.A + coef.B * coef.B) / coef.C;
+            double speVar = 2.0 * Math.Sqrt(coef.A * coef.A + coef.B * coef.B) / coef.C;
             return speVar;
         }
 
@@ -135,6 +141,34 @@ namespace StaticBalancing
         public double GetPhaseDiff(List<double> phaseList)
         {
             return 0.0;
+        }
+
+        public double GetResidualImbalance(List<ForceVector> fvs)
+        {
+            int n = fvs.Count();
+
+            double mag = 0.0;
+            double phase = 0.0;
+
+            for(int i = 0; i < n; ++i)
+            {
+                ForceVector curr = fvs[i];
+
+                double x1 = mag * Math.Cos(phase);
+                double y1 = mag * Math.Sin(phase);
+
+                double x2 = curr.Imbalance * Math.Cos(curr.Phase);
+                double y2 = curr.Imbalance * Math.Sin(curr.Phase);
+
+                double x = x1 + x2;
+                double y = y1 + y2;
+
+                mag = Math.Sqrt(x * x + y * y);
+                phase = Math.Atan2(y, x);
+            }
+
+
+            return mag;
         }
 
     }
