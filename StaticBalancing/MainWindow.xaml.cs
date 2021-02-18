@@ -20,6 +20,12 @@ namespace StaticBalancing
     /// </summary>
     public partial class MainWindow : Window
     {
+        public SystemInfo m_selectedSystem;
+        public Arithmetic m_balanceCalculator;
+
+        public Dictionary<string, Grid> m_BalancePositions;
+        public Dictionary<string, Grid> m_CalibrationsDict;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +39,20 @@ namespace StaticBalancing
         private void SystemSelectButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: pop up a windows, display info from the configuraiton file, and let user to select target system and enter serial numbers
+        }
+
+
+
+        // create GUI item dynamically
+        private Grid CreateBalancePositionLabel(string label, double radius, double degree)
+        {
+            return new Grid();
+        }
+
+
+        private Grid CreateCalibrationField()
+        {
+            return new Grid();
         }
     }
 }

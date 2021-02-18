@@ -25,7 +25,5 @@ namespace StaticBalancing
             m_counters = new Dictionary<string, Counter>();
         }
 
-
-
     }
 }

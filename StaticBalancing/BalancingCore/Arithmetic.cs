@@ -167,7 +167,6 @@ namespace StaticBalancing
                 phase = Math.Atan2(y, x);
             }
 
-
             return mag;
         }
 
