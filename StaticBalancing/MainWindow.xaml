@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StaticBalancing"
         mc:Ignorable="d"
-        Title="Static Balancing Tool" Height="900" Width="800" ResizeMode="NoResize">
+        Title="Static Balancing Tool" Height="900" Width="900" ResizeMode="NoResize">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height = "25*"/>
-            <RowDefinition Height = "535*"/>
-            <RowDefinition Height = "340*"/>
+            <RowDefinition Height = "555*"/>
+            <RowDefinition Height = "320*"/>
         </Grid.RowDefinitions>
 
         <Grid Name= "MenuGrid" Grid.Row="0">
@@ -21,7 +21,7 @@
                 </Menu>
             </DockPanel>
         </Grid>
-        
+
         <Grid Name="SystemGrid" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="55*"/>
@@ -29,26 +29,25 @@
             </Grid.RowDefinitions>
 
             <Grid Name="PresetGrid" Grid.Row="0">
-                <Label x:Name="ConfigFilePathLabel" Content="System Configuration" Height ="35" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" Width="139"/>
-                <TextBox x:Name="ConfigFilePathTextbox" HorizontalAlignment="Left" Height="35" Margin="154,6,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="431" Padding="3" IsReadOnly="True" MouseLeftButtonUp="ConfigFilePathTextbox_MouseLeftButtonUp"/>
-                <Button x:Name="SystemSelectButton" Content="Select" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="76" Click="SystemSelectButton_Click"/>
+                <Label x:Name="ConfigFilePathLabel" Content="System Configuration" Height ="35" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,6,0,0" Width="145" FontSize="14" Padding="5"/>
+                <TextBox x:Name="ConfigFilePathTextbox" HorizontalAlignment="Left" Height="35" Margin="150,6,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="435" Text="{Binding SystemConfigFile, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" FontSize="14" Padding="5" IsReadOnly="True" MouseDoubleClick="ConfigFilePathTextbox_MouseDoubleClick"/>
+                <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+                <Label x:Name="StatusLabel" HorizontalAlignment="Left" Margin="710,6,0,0" VerticalAlignment="Top" Width="175" Height="35" Content="{Binding Path=StatusLabelContent, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding StatusLabelColor, UpdateSourceTrigger = PropertyChanged}"/>
             </Grid>
 
             <Grid Name="InfoDisplayGrid" Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300*"/>
+                    <ColumnDefinition Width="400*"/>
                     <ColumnDefinition Width="500*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Name="CalibrationGrid" Grid.Column="0">
-
-                </Grid>
+                <Grid Name="CalibrationGrid" Grid.Column="0"/>
 
                 <Grid Name="SystemInfoGrid" Grid.Column="1">
 
                     <Grid Name ="SystemInfoDisplayGrid">
                         <Grid.Background>
-                            <ImageBrush Opacity="0.4" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill"/>
+                            <ImageBrush Opacity="0.4" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
                         </Grid.Background>
                     </Grid>
 
@@ -63,10 +62,11 @@
                 <RowDefinition Height="30*"/>
             </Grid.RowDefinitions>
             <Grid Name="BalanceLogGrid" Grid.Row="0">
-                
+                <DataGrid x:Name="BalancingResultDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+
 
             </Grid>
-            
+
             <Grid Name="BalanceResultGrid" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="450*"/>
