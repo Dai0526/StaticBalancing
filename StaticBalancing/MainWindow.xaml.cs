@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StaticBalancing.ViewModel;
 using System.IO;
+using System.Windows.Threading;
 
 namespace StaticBalancing
 {
@@ -22,6 +23,13 @@ namespace StaticBalancing
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        // constant
+        private readonly SolidColorBrush COLOR_ERROR = new SolidColorBrush(Colors.Red);
+        private readonly SolidColorBrush COLOR_DEFAULT = new SolidColorBrush(Colors.Blue);
+        private readonly SolidColorBrush COLOR_SUCCESS = new SolidColorBrush(Colors.Green);
+
+        // member
         public BalancingCore m_balancer;
         public SystemInfo m_selectedSystem;
         public Arithmetic m_balanceCalculator;
@@ -32,6 +40,9 @@ namespace StaticBalancing
         private string m_executablePath;
 
         static MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+
+        // for time elapsed status bar
+        private DispatcherTimer m_dispatcherTimer;
 
         public MainWindow()
         {
@@ -53,7 +64,9 @@ namespace StaticBalancing
                 mainWindowViewModel.SystemConfigFile = configFilePath;
             }
 
-            
+            // init status bar
+            InitStatusTimer();
+            SetStatus("Applicatio Started", COLOR_SUCCESS);
         }
 
         // TODO: Windows File Explore browser to choose system configuration
@@ -96,6 +109,36 @@ namespace StaticBalancing
 
 
         }
+
+
+        #region Status and Status Bar Control
+        // Status Bar Funcs
+        private void SetStatus(string status, SolidColorBrush c, int durationSec = 3)
+        {
+            mainWindowViewModel.StatusLabelContent = status;
+            mainWindowViewModel.StatusLabelColor = c;
+            m_dispatcherTimer.Interval = new TimeSpan(0, 0, durationSec);
+            m_dispatcherTimer.Start();
+        }
+
+        private void InitStatusTimer()
+        {
+            //Create a timer with interval of 2 secs for status display
+            m_dispatcherTimer = new DispatcherTimer();
+            m_dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            m_dispatcherTimer.Interval = new TimeSpan(0, 0, 3); // 3 seconds as default
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            mainWindowViewModel.StatusLabelContent = "";
+            mainWindowViewModel.StatusLabelColor = COLOR_DEFAULT;
+            //Disable the timer
+            m_dispatcherTimer.IsEnabled = false;
+        }
+
+        #endregion
+
 
         // create GUI item dynamically
         private Grid CreateBalancePositionLabel(string label, double radius, double degree)

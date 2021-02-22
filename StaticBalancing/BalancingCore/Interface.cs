@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace StaticBalancing
 {
@@ -105,7 +106,6 @@ namespace StaticBalancing
 
     #endregion
 
-
     #region Balancing Data TypeDefs
 
     public struct InputRaw
@@ -188,6 +188,11 @@ namespace StaticBalancing
         public double Phase;
         public double Imbalance;
     }
+
+    #endregion
+
+    #region GUI
+
 
     #endregion
 
