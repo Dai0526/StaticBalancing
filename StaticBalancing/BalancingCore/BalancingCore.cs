@@ -44,9 +44,9 @@ namespace StaticBalancing
                     SystemInfo si = new SystemInfo();
 
                     si.m_model = Convert.ToString(node["Model"].InnerText);
-                    si.m_homeTickOffset = float.Parse(node["HomeTickOffset"].InnerText);
-                    si.m_maxImbalance = float.Parse(node["MaxImbalance"].InnerText);
-                    si.m_maxSpeed = Convert.ToInt32(node["MaxSpeed"].InnerText);
+                    si.m_homeTickOffset = double.Parse(node["HomeTickOffset"].InnerText);
+                    si.m_maxImbalance = double.Parse(node["MaxImbalance"].InnerText);
+                    si.m_maxSpeed = double.Parse(node["MaxSpeed"].InnerText);
 
 
                     XmlNodeList bpNodes = node.SelectNodes("BalancePositionList/position");

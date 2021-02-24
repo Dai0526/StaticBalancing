@@ -13,7 +13,7 @@ namespace StaticBalancing.ViewModel
         public MainWindowViewModel() {}
 
         //Bind System Configuration file path
-        private string systemConfigurationFile = "<- please set system configuration file ->";
+        private string systemConfigurationFile = string.Empty;
         public string SystemConfigFile
         {
             get { return systemConfigurationFile; }
@@ -24,6 +24,79 @@ namespace StaticBalancing.ViewModel
             }
         }
 
+        // Bind System info displayed
+        private string selectedSystemModel = string.Empty;
+        public string SelectedModel
+        {
+            get { return selectedSystemModel; }
+            set
+            {
+                selectedSystemModel = value;
+                OnPropertyChanged(nameof(SelectedModel));
+            }
+        }
+
+        private string selectedSerialNumber = string.Empty;
+        public string SelectedSerialNumber
+        {
+            get { return selectedSerialNumber; }
+            set
+            {
+                selectedSerialNumber = value;
+                OnPropertyChanged(nameof(SelectedSerialNumber));
+            }
+        }
+
+        private double selectedMaxImba = 0.0;
+        public double SelectedModelMaxImba
+        {
+            get { return selectedMaxImba; }
+            set
+            {
+                selectedMaxImba = value;
+                OnPropertyChanged(nameof(SelectedModelMaxImba));
+            }
+        }
+
+        private double selectedMaxSpe = 0.0;
+        public double SelectedModelMaxSpeed
+        {
+            get { return selectedMaxSpe; }
+            set
+            {
+                selectedMaxSpe = value;
+                OnPropertyChanged(nameof(SelectedModelMaxSpeed));
+            }
+        }
+
+        private double selectedOffset = 0.0;
+        public double SelectedModelOffset
+        {
+            get { return selectedOffset; }
+            set
+            {
+                selectedOffset = value;
+                OnPropertyChanged(nameof(SelectedModelOffset));
+            }
+        }
+
+        public void SetDisplayedInfo(string model, string serial, double maxspe, double maximba, double offset)
+        {
+            SelectedModel = model;
+            SelectedSerialNumber = serial;
+            SelectedModelMaxImba = maximba;
+            SelectedModelMaxSpeed = maxspe;
+            SelectedModelOffset = offset;
+        }
+
+        public void SetDisplayedInfo(SystemInfo info)
+        {
+            SelectedModel = info.m_model;
+            SelectedSerialNumber = info.m_serialNumber;
+            SelectedModelMaxImba = info.m_maxImbalance;
+            SelectedModelMaxSpeed = info.m_maxSpeed;
+            SelectedModelOffset = info.m_homeTickOffset;
+        }
 
         // Bind Status Label attribute
         private SolidColorBrush statusLabelColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));

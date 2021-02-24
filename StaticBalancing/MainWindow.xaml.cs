@@ -72,6 +72,15 @@ namespace StaticBalancing
         // TODO: Windows File Explore browser to choose system configuration
         private void ConfigFilePathTextbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            BrowseConfigurationFile();
+        }
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseConfigurationFile();
+        }
+
+        private void BrowseConfigurationFile()
+        {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select the configuration file";
             fbd.DefaultExt = "xml";
@@ -91,7 +100,8 @@ namespace StaticBalancing
         {
             if (!File.Exists(mainWindowViewModel.SystemConfigFile))
             {
-                MessageBox.Show("Error", "System Configuraton file doesn't exist: " + mainWindowViewModel.SystemConfigFile + ". Please verify the file location.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("System Configuraton file doesn't exist: " + mainWindowViewModel.SystemConfigFile + ". Please verify the file location.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             try
@@ -101,12 +111,12 @@ namespace StaticBalancing
             }
             catch (Exception ex)
             {
-                
-                MessageBox.Show("Error", "Failed to parse system configuration: " + ex.Data + ". Please check file format. ", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to parse system configuration: " + ex.Data + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
 
-
+            mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemArchives["CT16"]);
 
         }
 
@@ -157,5 +167,7 @@ namespace StaticBalancing
         {
             return new Grid();
         }
+
+
     }
 }

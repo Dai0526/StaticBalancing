@@ -9,9 +9,9 @@ namespace StaticBalancing
         public string m_model { get; set; }
         public string m_serialNumber { get; set; }
 
-        public float m_homeTickOffset { get; set; }
-        public float m_maxImbalance { get; set; }
-        public float m_maxSpeed { get; set; }
+        public double m_homeTickOffset { get; set; }
+        public double m_maxImbalance { get; set; }
+        public double m_maxSpeed { get; set; }
 
         public List<BalancePosition> m_balancePos { get; set; }
         public Dictionary<string, Counter> m_counters { get; set; } // a record of support counter type

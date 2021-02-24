@@ -35,7 +35,7 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="ConfigFilePathLabel" Content="System Configuration" Height ="35" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,6,0,0" Width="145" FontSize="14" Padding="5"/>
                 <TextBox x:Name="ConfigFilePathTextbox" HorizontalAlignment="Left" Height="35" Margin="150,6,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="435" Text="{Binding SystemConfigFile, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" FontSize="14" Padding="5" IsReadOnly="True" MouseDoubleClick="ConfigFilePathTextbox_MouseDoubleClick"/>
-                <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+                <Button x:Name="BrowseButton" Content="Browse" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="90" Click="BrowseButton_Click"/>
                 <Label x:Name="StatusLabel" HorizontalAlignment="Left" Margin="710,6,0,0" VerticalAlignment="Top" Width="175" Height="35" FontSize="14" Padding="5" Content="{Binding Path=StatusLabelContent, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding StatusLabelColor, UpdateSourceTrigger = PropertyChanged}" Grid.ColumnSpan="2"/>
             </Grid>
 
@@ -53,17 +53,38 @@
                     </Grid.RowDefinitions>
 
                     <Grid Name="InfoGrid" Grid.Row="0">
+                        <Label x:Name="CTModelNameLabel" Content="CT Model" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
+                        <Label x:Name="CTModelValueLabel" Content="{Binding Path=SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
+                        <Label x:Name="SerialNumNameLabel" Content="Serial#" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
+                        <Label x:Name="SerialNumValueLabel" Content="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Width="132" Height="30"/>
+
+                        <Label x:Name="MaxImbaNameLabel" Content="Max.Imbalance" HorizontalAlignment="Left" Margin="5,90,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                        <Label x:Name="MaxImbaValueLabel" Content="{Binding Path=SelectedModelMaxImba, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                        <Label x:Name="MaxImbaUnitLabel" Content="g*m" HorizontalAlignment="Left" Margin="165,90,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
                         
+                        <Label x:Name="MaxSpeNameLabel" Content="Max.Speed" HorizontalAlignment="Left" Margin="5,50,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                        <Label x:Name="MaxSpeValueLabel" Content="{Binding Path=SelectedModelMaxSpeed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,50,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                        <Label x:Name="MaxSpeUnitLabel" Content="rpm" HorizontalAlignment="Left" Margin="165,50,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+                        
+                        <Label x:Name="OffsetNameLabel" Content="Home Offset" HorizontalAlignment="Left" Margin="5,130,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                        <Label x:Name="OffsetValueLabel" Content="{Binding Path=SelectedModelOffset, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,130,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                        <Label x:Name="OffsetUnitLabel" Content="degree" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+                        
+                        
+                        
+
                     </Grid>
-                    
+
                     <Grid Name="BalancePositionGrid" Grid.Row="1">
-                        
+
                     </Grid>
-                    
+
                     <Grid Name="ButtonGrid"  Grid.Row="2">
-                        
+                        <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+
                     </Grid>
-                    
+
                 </Grid>
 
                 <Grid Name="RotorDiagramGrid" Grid.Column="1">
