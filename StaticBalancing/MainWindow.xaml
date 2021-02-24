@@ -77,11 +77,13 @@
                     </Grid>
 
                     <Grid Name="BalancePositionGrid" Grid.Row="1">
-
+                        <TabControl x:Name="BalancePositionTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        </TabControl>
                     </Grid>
 
                     <Grid Name="ButtonGrid"  Grid.Row="2">
-                        <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+                        <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="40,7,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+                        <Button x:Name="CalibrateButton" Content="Calibrate" Height="35" HorizontalAlignment="Left" Margin="230,7,0,0" VerticalAlignment="Top" Width="90" Click="CalibrateButton_Click"/>
 
                     </Grid>
 
