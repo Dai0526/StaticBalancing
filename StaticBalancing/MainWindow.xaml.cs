@@ -168,6 +168,9 @@ namespace StaticBalancing
             return new Grid();
         }
 
+        private void CalibrateButton_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }
