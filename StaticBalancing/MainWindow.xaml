@@ -29,10 +29,14 @@
             </Grid.RowDefinitions>
 
             <Grid Name="PresetGrid" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="770*"/>
+                    <ColumnDefinition Width="123*"/>
+                </Grid.ColumnDefinitions>
                 <Label x:Name="ConfigFilePathLabel" Content="System Configuration" Height ="35" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,6,0,0" Width="145" FontSize="14" Padding="5"/>
                 <TextBox x:Name="ConfigFilePathTextbox" HorizontalAlignment="Left" Height="35" Margin="150,6,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="435" Text="{Binding SystemConfigFile, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" FontSize="14" Padding="5" IsReadOnly="True" MouseDoubleClick="ConfigFilePathTextbox_MouseDoubleClick"/>
                 <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
-                <Label x:Name="StatusLabel" HorizontalAlignment="Left" Margin="710,6,0,0" VerticalAlignment="Top" Width="175" Height="35" FontSize="14" Padding="5" Content="{Binding Path=StatusLabelContent, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding StatusLabelColor, UpdateSourceTrigger = PropertyChanged}"/>
+                <Label x:Name="StatusLabel" HorizontalAlignment="Left" Margin="710,6,0,0" VerticalAlignment="Top" Width="175" Height="35" FontSize="14" Padding="5" Content="{Binding Path=StatusLabelContent, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding StatusLabelColor, UpdateSourceTrigger = PropertyChanged}" Grid.ColumnSpan="2"/>
             </Grid>
 
             <Grid Name="InfoDisplayGrid" Grid.Row="1">
@@ -41,11 +45,29 @@
                     <ColumnDefinition Width="500*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Name="CalibrationGrid" Grid.Column="0"/>
+                <Grid Name="SystemInfoGrid" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35*"/>
+                        <RowDefinition Height="55*"/>
+                        <RowDefinition Height="10*"/>
+                    </Grid.RowDefinitions>
 
-                <Grid Name="SystemInfoGrid" Grid.Column="1">
+                    <Grid Name="InfoGrid" Grid.Row="0">
+                        
+                    </Grid>
+                    
+                    <Grid Name="BalancePositionGrid" Grid.Row="1">
+                        
+                    </Grid>
+                    
+                    <Grid Name="ButtonGrid"  Grid.Row="2">
+                        
+                    </Grid>
+                    
+                </Grid>
 
-                    <Grid Name ="SystemInfoDisplayGrid">
+                <Grid Name="RotorDiagramGrid" Grid.Column="1">
+                    <Grid Name ="ImbalanceDisplayGrid">
                         <Grid.Background>
                             <ImageBrush Opacity="0.4" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
                         </Grid.Background>
