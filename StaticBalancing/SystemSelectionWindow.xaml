@@ -15,15 +15,17 @@
 
         <Grid Name="CandidateGrid" Grid.Row="0">
             <Label x:Name="ComboboxLabel" Content="Select System" HorizontalAlignment="Left" Margin="25,10,0,0" VerticalAlignment="Top" Height="30" Width="90" Padding="6"/>
-            <ComboBox x:Name="SystemSelectionCbx" HorizontalAlignment="Left" Margin="125,10,0,0" VerticalAlignment="Top" Width="200" Height="30"/>
+            <ComboBox x:Name="SystemSelectionCbx" HorizontalAlignment="Left" Margin="125,10,0,0" VerticalAlignment="Top" Width="200" Height="30">
+
+            </ComboBox>
         </Grid>
         
         <Grid Name="DetailsGrid" Grid.Row="1">
             
         </Grid>
         <Grid Name="ButtonGrid" Grid.Row="2">
-            <Button x:Name="SetButton" Content="Select" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="12"/>
-            <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,10,80,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="12"/>
+            <Button x:Name="SetButton" Content="Select" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="75" Height="26" FontSize="12" Click="SetButton_Click"/>
+            <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,10,80,0" VerticalAlignment="Top" Width="75" Height="26" FontSize="12" Click="CancelButton_Click"/>
         </Grid>
         
     </Grid>

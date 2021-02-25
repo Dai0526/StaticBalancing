@@ -19,9 +19,51 @@ namespace StaticBalancing
     /// </summary>
     public partial class SystemSelectionWindow : Window
     {
+        BalancingCore m_systemCore;
+
         public SystemSelectionWindow()
         {
             InitializeComponent();
+        }
+
+        public SystemSelectionWindow(ref BalancingCore core)
+        {
+            InitializeComponent();
+            m_systemCore = core;
+            InitCombobox();
+        }
+
+        public void InitCombobox()
+        {
+            foreach(KeyValuePair<string, SystemInfo> pair in m_systemCore.m_systemArchives)
+            {
+                string id = pair.Key;
+                SystemInfo info = pair.Value;
+
+                ComboBoxItem cbItem = new ComboBoxItem();
+                cbItem.Name = id;
+                cbItem.Content = id;
+
+                SystemSelectionCbx.Items.Add(cbItem);
+            }
+
+            ComboBoxItem newItem = new ComboBoxItem();
+            newItem.Name = "NewSystem";
+            newItem.Content = "New System";
+
+            SystemSelectionCbx.SelectedIndex = 0;
+        }
+
+        private void SetButton_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedItem = ((ComboBoxItem)SystemSelectionCbx.SelectedItem).Content.ToString();
+            m_systemCore.SetCurrentSystem(selectedItem);
+            this.Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

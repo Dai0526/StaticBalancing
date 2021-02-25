@@ -115,8 +115,11 @@ namespace StaticBalancing
                 return;
             }
 
+            SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
+            //ssw.DataContext = mainWindowViewModel;
+            ssw.ShowDialog();
 
-            mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemArchives["CT16"]);
+            mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemSelected);
 
         }
 
