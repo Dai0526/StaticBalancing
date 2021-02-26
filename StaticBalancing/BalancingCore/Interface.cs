@@ -1,9 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace StaticBalancing
 {
@@ -19,13 +16,13 @@ namespace StaticBalancing
 
     public struct BalancePosition
     {
-        public string ID;
-        public float Radius;
-        public float Angle;
-        public float MaxStackHeight;
-        public StackDirection StackDir;
-        public Dictionary<string, int> Counters; // partname, # of counters
-        public SineRegCoef LastRunCoef;
+        public string ID { get; set; }
+        public float Radius { get; set; }
+        public float Angle { get; set; }
+        public float MaxStackHeight { get; set; }
+        public StackDirection StackDir { get; set; }
+        public Dictionary<string, int> Counters { get; set; } // partname, # of counters
+        public SineRegCoef LastRunCoef { get; set; }
 
         public BalancePosition(string id)
         {
@@ -92,9 +89,9 @@ namespace StaticBalancing
 
     public struct Counter
     {
-        public string PartNumber;
-        public float Mass;
-        public float Thickness;
+        public string PartNumber { get; set; }
+        public float Mass { get; set; }
+        public float Thickness { get; set; }
 
         public Counter(string pn, float mass, float thickness)
         {

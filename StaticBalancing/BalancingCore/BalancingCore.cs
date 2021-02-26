@@ -111,6 +111,11 @@ namespace StaticBalancing
             return m_systemSelected;
         }
 
+        public SystemInfo GetSystem(string id)
+        {
+            return m_systemArchives[id];
+        }
+
         // for rnd use
         public void CreateNewSystem()
         {
@@ -122,11 +127,6 @@ namespace StaticBalancing
         {
 
         }
-
-        // Process Data
-
-
-        // Save Data
 
     }
 }

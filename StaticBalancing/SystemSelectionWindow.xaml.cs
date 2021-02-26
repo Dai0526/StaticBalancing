@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace StaticBalancing
 {
@@ -19,7 +11,7 @@ namespace StaticBalancing
     /// </summary>
     public partial class SystemSelectionWindow : Window
     {
-        BalancingCore m_systemCore;
+        BalancingCore m_refSystemCore;
 
         public SystemSelectionWindow()
         {
@@ -29,13 +21,16 @@ namespace StaticBalancing
         public SystemSelectionWindow(ref BalancingCore core)
         {
             InitializeComponent();
-            m_systemCore = core;
+
+            m_refSystemCore = core;
+            this.DataContext = this;
+
             InitCombobox();
         }
 
         public void InitCombobox()
         {
-            foreach(KeyValuePair<string, SystemInfo> pair in m_systemCore.m_systemArchives)
+            foreach(KeyValuePair<string, SystemInfo> pair in m_refSystemCore.m_systemArchives)
             {
                 string id = pair.Key;
                 SystemInfo info = pair.Value;
@@ -47,23 +42,47 @@ namespace StaticBalancing
                 SystemSelectionCbx.Items.Add(cbItem);
             }
 
-            ComboBoxItem newItem = new ComboBoxItem();
-            newItem.Name = "NewSystem";
-            newItem.Content = "New System";
+            // TODO: allow new systems in future
+            //ComboBoxItem newItem = new ComboBoxItem();
+            //newItem.Name = "NewSystem";
+            //newItem.Content = "New System";
 
-            SystemSelectionCbx.SelectedIndex = 0;
+            if(SystemSelectionCbx.Items.Count > 0)
+            {
+                SystemSelectionCbx.SelectedIndex = 0;
+            }
         }
 
         private void SetButton_Click(object sender, RoutedEventArgs e)
         {
             string selectedItem = ((ComboBoxItem)SystemSelectionCbx.SelectedItem).Content.ToString();
-            m_systemCore.SetCurrentSystem(selectedItem);
+            m_refSystemCore.SetCurrentSystem(selectedItem);
             this.Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+        }
+
+        private void SystemSelectionCbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedItem = ((ComboBoxItem)SystemSelectionCbx.SelectedItem).Content.ToString();
+            SystemInfo sys = m_refSystemCore.GetSystem(selectedItem);
+
+            CTModelValueLabel.Content = sys.m_model;
+            MaxSpeValueLabel.Content = sys.m_maxSpeed;
+            MaxImbaValueLabel.Content = sys.m_maxImbalance;
+            OffsetValueLabel.Content = sys.m_homeTickOffset;
+
+            List<BalancePosition> bps = sys.m_balancePos;
+            List<Counter> ctrs = (sys.m_counters.Values).ToList();
+            BalancePositionDataGrid.ItemsSource = bps;
+            CounterDataGrid.ItemsSource = ctrs;
         }
     }
 }

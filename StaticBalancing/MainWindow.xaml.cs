@@ -119,7 +119,10 @@ namespace StaticBalancing
             //ssw.DataContext = mainWindowViewModel;
             ssw.ShowDialog();
 
-            mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemSelected);
+            if(m_balancer.m_systemSelected != null)
+            {
+                mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemSelected);
+            }
 
         }
 
