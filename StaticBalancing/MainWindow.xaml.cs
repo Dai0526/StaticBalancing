@@ -34,11 +34,14 @@ namespace StaticBalancing
         public SystemInfo m_selectedSystem;
         public Arithmetic m_balanceCalculator;
 
+        // Dynamically created GUI control items
         public Dictionary<string, Grid> m_BalancePositions;
         public Dictionary<string, Grid> m_CalibrationsDict;
 
+        // path
         private string m_executablePath;
 
+        // view model
         static MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
 
         // for time elapsed status bar
@@ -49,7 +52,6 @@ namespace StaticBalancing
             InitializeComponent();
             InitBalancing();
         }
-
 
         private void InitBalancing()
         {
@@ -69,7 +71,6 @@ namespace StaticBalancing
             SetStatus("Applicatio Started", COLOR_SUCCESS);
         }
 
-        // TODO: Windows File Explore browser to choose system configuration
         private void ConfigFilePathTextbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             BrowseConfigurationFile();
@@ -116,16 +117,30 @@ namespace StaticBalancing
             }
 
             SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
-            //ssw.DataContext = mainWindowViewModel;
             ssw.ShowDialog();
 
-            if(m_balancer.m_systemSelected != null)
-            {
-                mainWindowViewModel.SetDisplayedInfo(m_balancer.m_systemSelected);
-            }
+            DisplaySelectSystem();
 
         }
 
+        private void DisplaySelectSystem()
+        {
+            if(m_balancer.m_systemSelected == null)
+            {
+                MessageBox.Show("Please select a system to Calibrate", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            SystemInfo selected = m_balancer.m_systemSelected;
+
+            mainWindowViewModel.SetDisplayedInfo(selected);
+
+        }
+
+        private void CreateBalancePositionTag(List<BalancePosition> bpList)
+        {
+
+        }
 
         #region Status and Status Bar Control
         // Status Bar Funcs
@@ -161,13 +176,6 @@ namespace StaticBalancing
         {
             return new Grid();
         }
-
-
-
-
-
-
-
 
         private Grid CreateCalibrationField()
         {

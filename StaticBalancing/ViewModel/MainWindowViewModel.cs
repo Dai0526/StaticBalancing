@@ -80,6 +80,28 @@ namespace StaticBalancing.ViewModel
             }
         }
 
+        private List<BalancePosition> selectedBPList;
+        public List<BalancePosition> SelectedBalancePositions
+        {
+            get { return selectedBPList; }
+            set
+            {
+                selectedBPList = value;
+                OnPropertyChanged(nameof(SelectedBalancePositions));
+            }
+        }
+
+        private List<Counter> selectedCounterList;
+        public List<Counter> SelectedCounters
+        {
+            get { return selectedCounterList; }
+            set
+            {
+                selectedCounterList = value;
+                OnPropertyChanged(nameof(SelectedCounters));
+            }
+        }
+
         public void SetDisplayedInfo(string model, string serial, double maxspe, double maximba, double offset)
         {
             SelectedModel = model;
@@ -96,6 +118,9 @@ namespace StaticBalancing.ViewModel
             SelectedModelMaxImba = info.m_maxImbalance;
             SelectedModelMaxSpeed = info.m_maxSpeed;
             SelectedModelOffset = info.m_homeTickOffset;
+
+            SelectedBalancePositions = info.m_balancePos;
+            SelectedCounters = (info.m_counters.Values).ToList();
         }
 
         // Bind Status Label attribute

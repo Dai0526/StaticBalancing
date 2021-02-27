@@ -190,7 +190,6 @@ namespace StaticBalancing
 
     #region GUI
 
-
     #endregion
 
 }

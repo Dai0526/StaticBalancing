@@ -42,11 +42,6 @@ namespace StaticBalancing
                 SystemSelectionCbx.Items.Add(cbItem);
             }
 
-            // TODO: allow new systems in future
-            //ComboBoxItem newItem = new ComboBoxItem();
-            //newItem.Name = "NewSystem";
-            //newItem.Content = "New System";
-
             if(SystemSelectionCbx.Items.Count > 0)
             {
                 SystemSelectionCbx.SelectedIndex = 0;

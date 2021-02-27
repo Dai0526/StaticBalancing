@@ -47,38 +47,65 @@
 
                 <Grid Name="SystemInfoGrid" Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35*"/>
-                        <RowDefinition Height="55*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="50*"/>
                         <RowDefinition Height="10*"/>
                     </Grid.RowDefinitions>
 
                     <Grid Name="InfoGrid" Grid.Row="0">
-                        <Label x:Name="CTModelNameLabel" Content="CT Model" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
-                        <Label x:Name="CTModelValueLabel" Content="{Binding Path=SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+                        <TabControl Name="SystemInfoTabControl">
+                            <TabItem Name="SystemInfo" Header="SystemInfo">
+                                <Grid>
+                                    <Label x:Name="CTModelNameLabel" Content="CT Model" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
+                                    <Label x:Name="CTModelValueLabel" Content="{Binding Path=SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
 
-                        <Label x:Name="SerialNumNameLabel" Content="Serial#" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
-                        <Label x:Name="SerialNumValueLabel" Content="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Width="132" Height="30"/>
+                                    <Label x:Name="SerialNumNameLabel" Content="Serial#" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="70" Height="30" FontSize="13" FontWeight="Bold"/>
+                                    <Label x:Name="SerialNumValueLabel" Content="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Width="132" Height="30"/>
 
-                        <Label x:Name="MaxImbaNameLabel" Content="Max.Imbalance" HorizontalAlignment="Left" Margin="5,90,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
-                        <Label x:Name="MaxImbaValueLabel" Content="{Binding Path=SelectedModelMaxImba, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
-                        <Label x:Name="MaxImbaUnitLabel" Content="g*m" HorizontalAlignment="Left" Margin="165,90,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
-                        
-                        <Label x:Name="MaxSpeNameLabel" Content="Max.Speed" HorizontalAlignment="Left" Margin="5,50,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
-                        <Label x:Name="MaxSpeValueLabel" Content="{Binding Path=SelectedModelMaxSpeed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,50,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
-                        <Label x:Name="MaxSpeUnitLabel" Content="rpm" HorizontalAlignment="Left" Margin="165,50,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
-                        
-                        <Label x:Name="OffsetNameLabel" Content="Home Offset" HorizontalAlignment="Left" Margin="5,130,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
-                        <Label x:Name="OffsetValueLabel" Content="{Binding Path=SelectedModelOffset, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,130,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
-                        <Label x:Name="OffsetUnitLabel" Content="degree" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
-                        
-                        
-                        
+                                    <Label x:Name="MaxImbaNameLabel" Content="Max.Imbalance" HorizontalAlignment="Left" Margin="5,90,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                                    <Label x:Name="MaxImbaValueLabel" Content="{Binding Path=SelectedModelMaxImba, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                                    <Label x:Name="MaxImbaUnitLabel" Content="g*m" HorizontalAlignment="Left" Margin="165,90,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
+                                    <Label x:Name="MaxSpeNameLabel" Content="Max.Speed" HorizontalAlignment="Left" Margin="5,50,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                                    <Label x:Name="MaxSpeValueLabel" Content="{Binding Path=SelectedModelMaxSpeed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,50,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                                    <Label x:Name="MaxSpeUnitLabel" Content="rpm" HorizontalAlignment="Left" Margin="165,50,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
+                                    <Label x:Name="OffsetNameLabel" Content="Home Offset" HorizontalAlignment="Left" Margin="5,130,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
+                                    <Label x:Name="OffsetValueLabel" Content="{Binding Path=SelectedModelOffset, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,130,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
+                                    <Label x:Name="OffsetUnitLabel" Content="degree" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
+                                </Grid>
+                            </TabItem>
+                            <TabItem Name="BalancePosition" Header="BalancePosition">
+                                <DataGrid Name="BPDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="WhiteSmoke" AlternatingRowBackground="Wheat" ItemsSource="{Binding Path=SelectedBalancePositions, UpdateSourceTrigger=PropertyChanged}" HorizontalScrollBarVisibility="Visible">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Balance Position" Width="100" Binding="{Binding ID}"/>
+                                        <DataGridTextColumn Header="Radius (mm)" Width="80" Binding="{Binding Radius}"/>
+                                        <DataGridTextColumn Header="Angle (deg)" Width="80" Binding="{Binding Angle}"/>
+                                        <DataGridTextColumn Header="Max.StackHeight" Width="105" Binding="{Binding MaxStackHeight}"/>
+                                        <DataGridTextColumn Header="Stack Driection" Width="100" Binding="{Binding StackDir}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </TabItem>
+                            <TabItem Name="Counter" Header="Counter">
+                                <DataGrid Name="CounterDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="WhiteSmoke" AlternatingRowBackground="Wheat" ItemsSource="{Binding Path=SelectedCounters, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Counter" Width="105" Binding="{Binding PartNumber}"/>
+                                        <DataGridTextColumn Header="Mass (kg)" Width="105" Binding="{Binding Mass}"/>
+                                        <DataGridTextColumn Header="Thickness (mm)" Width="105" Binding="{Binding Thickness}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </TabItem>
+
+                        </TabControl>
+
+
+
 
                     </Grid>
 
-                    <Grid Name="BalancePositionGrid" Grid.Row="1">
-                        <TabControl x:Name="BalancePositionTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        </TabControl>
+                    <Grid Name="BalanceCalculationGrid" Grid.Row="1">
+                        
                     </Grid>
 
                     <Grid Name="ButtonGrid"  Grid.Row="2">
@@ -123,8 +150,8 @@
                 </Grid>
                 <Grid Name="BalanceStatsGrid" Grid.Column="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="37*"/>
-                        <ColumnDefinition Width="160*"/>
+                        <ColumnDefinition Width="0*"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                 </Grid>
