@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StaticBalancing"
         mc:Ignorable="d"
-        Title="Calibration" Height="300" Width="400" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="Calibration" Height="400" Width="300" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,9 +13,14 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TreeView x:Name="CaliTreeView">
-            </TreeView>
-
+            <Grid>
+                <Label Height="25" Width="50" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">Base</Label>
+                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Label Height="25" Width="50">Path</Label>
+                    <TextBox Height="25" Width="150"></TextBox>
+                    <Button Height="25" Width="30">Browse</Button>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="1">

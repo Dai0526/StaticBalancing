@@ -19,17 +19,33 @@ namespace StaticBalancing
     /// </summary>
     public partial class CalibrationWindow : Window
     {
-        BalancingCore m_balanceCore;
+        SystemInfo m_system;
 
         public CalibrationWindow()
         {
             InitializeComponent();
         }
 
-        public CalibrationWindow(ref BalancingCore core)
+        public CalibrationWindow(ref SystemInfo selected)
         {
+            m_system = selected;
+
+
+
             InitializeComponent();
-            m_balanceCore = core;
+        }
+
+        private void CreateGrid()
+        {
+            DataGrid dg = new DataGrid();
+            dg.Name = "CalibrationInputDataGrid";
+
+            foreach(BalancePosition bp in m_system.m_balancePos)
+            {
+                DataGridColumn dgc = new DataGridColumn();
+                dgc.Header = "Balance Position";
+            }
+
 
 
         }

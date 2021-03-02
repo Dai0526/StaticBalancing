@@ -133,7 +133,7 @@ namespace StaticBalancing
                 return;
             }
 
-            CalibrationWindow cw = new CalibrationWindow(ref m_balancer);
+            CalibrationWindow cw = new CalibrationWindow(ref m_balancer.m_systemSelected);
             cw.ShowDialog();
 
             DisplaySelectSystem();
