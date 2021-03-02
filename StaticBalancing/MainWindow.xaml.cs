@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using StaticBalancing.ViewModel;
 using System.IO;
 using System.Windows.Threading;
@@ -34,10 +26,6 @@ namespace StaticBalancing
         public SystemInfo m_selectedSystem;
         public Arithmetic m_balanceCalculator;
 
-        // Dynamically created GUI control items
-        public Dictionary<string, Grid> m_BalancePositions;
-        public Dictionary<string, Grid> m_CalibrationsDict;
-
         // path
         private string m_executablePath;
 
@@ -57,10 +45,10 @@ namespace StaticBalancing
         {
             this.DataContext = mainWindowViewModel;
 
-
             // init configuration path
             m_executablePath = Directory.GetCurrentDirectory();
             string configFilePath = m_executablePath + "\\system.xml"; ;
+
             if (File.Exists(configFilePath))
             {
                 mainWindowViewModel.SystemConfigFile = configFilePath;
@@ -120,7 +108,6 @@ namespace StaticBalancing
             ssw.ShowDialog();
 
             DisplaySelectSystem();
-
         }
 
         private void DisplaySelectSystem()
@@ -137,7 +124,22 @@ namespace StaticBalancing
 
         }
 
-        private void CreateBalancePositionTag(List<BalancePosition> bpList)
+        // 
+        private void CalibrateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_balancer.m_systemSelected == null)
+            {
+                MessageBox.Show("Please select a system before Calibration", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            CalibrationWindow cw = new CalibrationWindow(ref m_balancer);
+            cw.ShowDialog();
+
+            DisplaySelectSystem();
+        }
+
+        private void DisplayCalibrationResult()
         {
 
         }
@@ -171,20 +173,6 @@ namespace StaticBalancing
         #endregion
 
 
-        // create GUI item dynamically
-        private Grid CreateBalancePositionLabel(string label, double radius, double degree)
-        {
-            return new Grid();
-        }
 
-        private Grid CreateCalibrationField()
-        {
-            return new Grid();
-        }
-
-        private void CalibrateButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

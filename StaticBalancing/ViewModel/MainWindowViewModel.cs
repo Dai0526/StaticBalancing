@@ -123,6 +123,36 @@ namespace StaticBalancing.ViewModel
             SelectedCounters = (info.m_counters.Values).ToList();
         }
 
+
+        // Bind Calibration Result
+        private CalibrationResult calibrationResult;
+        public CalibrationResult CalibrationResult
+        {
+            get { return calibrationResult; }
+            set
+            {
+                calibrationResult = value;
+                OnPropertyChanged(nameof(CalibrationResult));
+            }
+        }
+
+        private List<ForceVector> caliForceVectors;
+        public List<ForceVector> ForceVectors
+        {
+            get { return caliForceVectors; }
+            set
+            {
+                caliForceVectors = value;
+                OnPropertyChanged(nameof(caliForceVectors));
+            }
+        }
+
+        public void SetCalibrationResult(CalibrationResult res)
+        {
+            CalibrationResult = res;
+            ForceVectors = res.ForceVectors.Values.ToList();
+        }
+
         // Bind Status Label attribute
         private SolidColorBrush statusLabelColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         public SolidColorBrush StatusLabelColor

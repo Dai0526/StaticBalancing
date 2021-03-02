@@ -97,6 +97,7 @@ namespace StaticBalancing
                 ForceVector fv = new ForceVector();
                 fv.ID = bp.ID;
                 fv.Imbalance = item[bp.ID] * bp.GetAppliedImbalance(counterSpec);
+                fv.WeightChange = item[bp.ID] * bp.GetWeight(counterSpec);
 
                 // get vector 
                 double diffA = bp.LastRunCoef.A - baseline.A;
@@ -106,7 +107,7 @@ namespace StaticBalancing
 
                 result.ForceVectors[bp.ID] = fv;
 
-                result.WeightChange[bp.ID] = item[bp.ID] * bp.GetWeight(counterSpec);
+                result.WeightChange[bp.ID] = fv.WeightChange;
             }
 
             List<ForceVector> fvs = result.ForceVectors.Values.ToList();

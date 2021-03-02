@@ -153,17 +153,17 @@ namespace StaticBalancing
 
     public struct CalibrationResult
     {
-        public string Label;
+        public string Label { get; set; }
 
-        public double Speed;
-        public double SpeedVariation;
-        public double Phase;
+        public double Speed { get; set; }
+        public double SpeedVariation { get; set; }
+        public double Phase { get; set; }
 
-        public Dictionary<string, double> WeightChange;
+        public Dictionary<string, double> WeightChange { get; set; }
         //public Dictionary<string, double> Imbalance;
-        public Dictionary<string, ForceVector> ForceVectors;
-        public double ResidualImblance;
-        public double ForceAtMaxSpeed;
+        public Dictionary<string, ForceVector> ForceVectors { get; set; }
+        public double ResidualImblance { get; set; }
+        public double ForceAtMaxSpeed { get; set; }
 
         public CalibrationResult(string id = "")
         {
@@ -181,9 +181,10 @@ namespace StaticBalancing
 
     public struct ForceVector
     {
-        public string ID;
-        public double Phase;
-        public double Imbalance;
+        public string ID { get; set; }
+        public double Phase { get; set; }
+        public double WeightChange { get; set; }
+        public double Imbalance { get; set; }
     }
 
     #endregion

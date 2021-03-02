@@ -92,8 +92,6 @@ namespace UTStaticBalancing
 
             CalibrationResult result = math.GetCalibrationMatrix(coef0, sys.m_balancePos, coef0, counterSpec, 240);
 
-            
-
         }
 
         static void CaseFitSine()

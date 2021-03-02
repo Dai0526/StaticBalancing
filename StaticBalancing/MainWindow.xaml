@@ -98,20 +98,44 @@
                             </TabItem>
 
                         </TabControl>
-
-
-
-
                     </Grid>
 
                     <Grid Name="BalanceCalculationGrid" Grid.Row="1">
-                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10*"/>
+                            <RowDefinition Height="10*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Label x:Name="CaliSpeedNameLabel" Content="Speed(rpm)" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="72" Height="37"/>
+                            <Label x:Name="CaliSpeedValueLabel" Content="{Binding Path=CalibrationResult.SpeedVariation, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="82,10,0,0" VerticalAlignment="Top" Width="49" Height="37"/>
+
+                            <Label x:Name="CaliSpeedVarNameLabel" Content="Speed Variation" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="94" Height="37"/>
+                            <Label x:Name="CaliSpeedVarValueLabel" Content="{Binding Path=CalibrationResult.Speed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="230,10,0,0" VerticalAlignment="Top" Width="53" Height="37"/>
+
+                            <Label x:Name="CaliPhaseNameLabel" Content="Phase" HorizontalAlignment="Left" Margin="288,10,0,0" VerticalAlignment="Top" Width="43" Height="37"/>
+                            <Label x:Name="CaliPhaseValueLabel" Content="{Binding Path=CalibrationResult.Phase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="336,10,0,0" VerticalAlignment="Top" Width="43" Height="37"/>
+
+                            <Label x:Name="CaliResImbaNameLabel" Content="Residual Imblance (g*m)" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="139" Height="37"/>
+                            <Label x:Name="CaliResImbaValueLabel" Content="{Binding Path=CalibrationResult.ResidualImblance, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="154,71,0,0" VerticalAlignment="Top" Width="51" Height="37"/>
+
+                            <Label x:Name="CaliFMaxSpeedNameLabel" Content="Force @Max Speed (N)" HorizontalAlignment="Left" Margin="210,71,0,0" VerticalAlignment="Top" Width="140" Height="37"/>
+                            <Label x:Name="CaliFMaxSpeedValueLabel" Content="{Binding Path=CalibrationResult.ForceAtMaxSpeed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="355,71,0,0" VerticalAlignment="Top" Width="32" Height="37"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <DataGrid Name="BalanceResultDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="WhiteSmoke" ItemsSource="{Binding Path=ForceVectors, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Balance Position" Width="5*" Binding="{Binding ID}"/>
+                                    <DataGridTextColumn Header="Weight Change(kg)" Width="5*" Binding="{Binding WeightChange}"/>
+                                    <DataGridTextColumn Header="Imbalance (g*m)" Width="5*" Binding="{Binding Imbalance}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
                     </Grid>
 
                     <Grid Name="ButtonGrid"  Grid.Row="2">
-                        <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="40,7,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
-                        <Button x:Name="CalibrateButton" Content="Calibrate" Height="35" HorizontalAlignment="Left" Margin="230,7,0,0" VerticalAlignment="Top" Width="90" Click="CalibrateButton_Click"/>
-
+                        <Button x:Name="SystemSelectButton" Content="Select System" Height="35" HorizontalAlignment="Left" Margin="50,7,0,0" VerticalAlignment="Top" Width="90" Click="SystemSelectButton_Click"/>
+                        <Button x:Name="CalibrateButton" Content="Calibrate" Height="35" HorizontalAlignment="Right" Margin="0,7,50,0" VerticalAlignment="Top" Width="90" Click="CalibrateButton_Click"/>
                     </Grid>
 
                 </Grid>
