@@ -136,14 +136,14 @@ namespace StaticBalancing.ViewModel
             }
         }
 
-        private List<ForceVector> caliForceVectors;
+        private List<ForceVector> caliForceVectors = new List<ForceVector>();
         public List<ForceVector> ForceVectors
         {
             get { return caliForceVectors; }
             set
             {
                 caliForceVectors = value;
-                OnPropertyChanged(nameof(caliForceVectors));
+                OnPropertyChanged(nameof(ForceVectors));
             }
         }
 

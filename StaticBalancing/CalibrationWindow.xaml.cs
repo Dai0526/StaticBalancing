@@ -16,6 +16,7 @@ namespace StaticBalancing
     public partial class CalibrationWindow : Window
     {
         CalibrationViewModel m_caliViewModel;
+        MainWindowViewModel m_mainVM;
         SystemInfo m_system;
 
         public CalibrationWindow()
@@ -23,10 +24,14 @@ namespace StaticBalancing
             InitializeComponent();
         }
 
-        public CalibrationWindow(ref SystemInfo selected)
+        public CalibrationWindow(ref SystemInfo selected, ref MainWindowViewModel mwvm)
         {
-            m_system = selected;
+
             InitializeComponent();
+
+            m_system = selected;
+            m_mainVM = mwvm;
+
             InitDisplayInfo();
         }
 
@@ -108,7 +113,7 @@ namespace StaticBalancing
 
                 // Compute dataset
                 CalibrationResult result = math.GetCalibrationMatrix(baseRun, m_system.m_balancePos, baseRun, m_system.m_counters, Convert.ToSingle(m_system.m_maxSpeed));
-
+                m_mainVM.SetCalibrationResult(result);
             }
             catch (Exception ex)
             {

@@ -107,6 +107,7 @@ namespace StaticBalancing.ViewModel
         }
     };
 
+
     class CalibrationViewModel : ViewModelBase
     {
 
@@ -115,7 +116,7 @@ namespace StaticBalancing.ViewModel
             _caliData = new List<CalibrationData>();
         }
 
-        private List<CalibrationData> _caliData;
+        private List<CalibrationData> _caliData = new List<CalibrationData>();
         public List<CalibrationData> CalibrationDataSet
         {
             get { return _caliData; }
