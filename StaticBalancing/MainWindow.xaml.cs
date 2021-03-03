@@ -136,7 +136,7 @@ namespace StaticBalancing
             CalibrationWindow cw = new CalibrationWindow(ref m_balancer.m_systemSelected);
             cw.ShowDialog();
 
-            DisplaySelectSystem();
+            DisplayCalibrationResult();
         }
 
         private void DisplayCalibrationResult()

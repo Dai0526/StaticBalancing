@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StaticBalancing"
+        xmlns:VM="clr-namespace:StaticBalancing.ViewModel"
         mc:Ignorable="d"
-        Title="Calibration" Height="400" Width="300" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="Calibration" Height="550" Width="450" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,14 +14,36 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Grid>
-                <Label Height="25" Width="50" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">Base</Label>
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Label Height="25" Width="50">Path</Label>
-                    <TextBox Height="25" Width="150"></TextBox>
-                    <Button Height="25" Width="30">Browse</Button>
-                </StackPanel>
-            </Grid>
+            <TreeView x:Name="MainTreeView" ItemsSource="{Binding CalibrationDataSet}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Counters}" DataType="{x:Type VM:CalibrationData}">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Height="40">
+                                <Label Content="{Binding BalancePosition}" Width="80" FontSize="14" Padding="5"/>
+                                <TextBox Text="{Binding InputDataPath, Mode=TwoWay}" IsReadOnly="True" Width="200" Margin="10,5,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                <Button Tag="{Binding BalancePosition}"  Content="Browse" Margin="10,5,0,0" Height="30" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate DataType="{x:Type VM:CaliCounter}">
+                                <StackPanel Orientation="Horizontal" Height="40">
+                                    <Label Content="{Binding PartName}" Width="80" FontSize="12" Padding="5"/>
+                                    <Label Content="{Binding Mass}" Width="30" FontSize="12"/>
+                                    <Label Content="kg per unit. Add" Width="100" FontSize="12" Padding="5"/>
+                                    <TextBox Text="{Binding Count, Mode=TwoWay}" Width="50" Margin="10,5,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
         </Grid>
 
         <Grid Grid.Row="1">
