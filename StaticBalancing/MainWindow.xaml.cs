@@ -8,6 +8,9 @@ using StaticBalancing.ViewModel;
 using System.IO;
 using System.Windows.Threading;
 
+using OxyPlot;
+using OxyPlot.Wpf;
+
 namespace StaticBalancing
 {
     /// <summary>
