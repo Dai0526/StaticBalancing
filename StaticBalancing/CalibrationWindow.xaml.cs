@@ -40,8 +40,6 @@ namespace StaticBalancing
             m_caliViewModel = new CalibrationViewModel();
             this.DataContext = m_caliViewModel;
 
-
-
             // Copy Counter to CaliCounter
             List<Counter> ctrs = (m_system.m_counters.Values).ToList();
             // set calibration balance position
@@ -78,10 +76,24 @@ namespace StaticBalancing
 
         private void CalibrateButton_Click(object sender, RoutedEventArgs e)
         {
+            // validation data
+            bool isValid = true;
+            foreach(CalibrationData data in m_caliViewModel.CalibrationDataSet)
+            {
+                if (string.IsNullOrEmpty(data.InputDataPath))
+                {
+                    isValid = false;
+                }
+            }
+
+            if (!isValid)
+            {
+                MessageBox.Show("Please set Input Data Path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             try
             {
-                // validation data
 
                 // calculation
                 DataHandler dh = new DataHandler();
@@ -118,7 +130,6 @@ namespace StaticBalancing
             catch (Exception ex)
             {
                 MessageBox.Show("Fail to Calibrate: " + ex.Data, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
             }
 
             this.Close();
