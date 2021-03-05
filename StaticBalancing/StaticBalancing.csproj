@@ -139,11 +139,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\Images\CTRotorWithAngle.png" />
     <EmbeddedResource Include="Resource\Images\GenericCTRotor.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\MatlabFunc\sinefit.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Images\CTRotorWithAngle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

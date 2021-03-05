@@ -6,34 +6,30 @@
         xmlns:local="clr-namespace:StaticBalancing"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="Static Balancing Tool" Height="900" Width="900" ResizeMode="NoResize">
+        Title="Static Balancing Tool" Height="950" Width="900" ResizeMode="NoResize">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height = "25*"/>
-            <RowDefinition Height = "555*"/>
-            <RowDefinition Height = "320*"/>
+            <!--<RowDefinition Height = "25*"/>-->
+            <RowDefinition Height = "550"/>
+            <RowDefinition Height = "400"/>
         </Grid.RowDefinitions>
 
-        <Grid Name= "MenuGrid" Grid.Row="0">
+        <!--<Grid Name= "MenuGrid" Grid.Row="0">
             <DockPanel Name="MenuPanel"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="_System"></MenuItem>
                     <MenuItem Header="_Help"></MenuItem>
                 </Menu>
             </DockPanel>
-        </Grid>
+        </Grid>-->
 
-        <Grid Name="SystemGrid" Grid.Row="1">
+        <Grid Name="SystemGrid" Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="55*"/>
-                <RowDefinition Height="500*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="500"/>
             </Grid.RowDefinitions>
 
             <Grid Name="PresetGrid" Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="770*"/>
-                    <ColumnDefinition Width="123*"/>
-                </Grid.ColumnDefinitions>
                 <Label x:Name="ConfigFilePathLabel" Content="System Configuration" Height ="35" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,6,0,0" Width="145" FontSize="14" Padding="5"/>
                 <TextBox x:Name="ConfigFilePathTextbox" HorizontalAlignment="Left" Height="35" Margin="150,6,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="435" Text="{Binding SystemConfigFile, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" FontSize="14" Padding="5" IsReadOnly="True" MouseDoubleClick="ConfigFilePathTextbox_MouseDoubleClick"/>
                 <Button x:Name="BrowseButton" Content="Browse" Height="35" HorizontalAlignment="Left" Margin="590,6,0,0" VerticalAlignment="Top" Width="90" Click="BrowseButton_Click"/>
@@ -42,15 +38,15 @@
 
             <Grid Name="InfoDisplayGrid" Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="400*"/>
-                    <ColumnDefinition Width="500*"/>
+                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition Width="500"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Name="SystemInfoGrid" Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40*"/>
-                        <RowDefinition Height="50*"/>
-                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="250"/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
 
                     <Grid Name="InfoGrid" Grid.Row="0">
@@ -145,10 +141,8 @@
                 <Grid Name="RotorDiagramGrid" Grid.Column="1">
                     <Grid Name ="ImbalanceDisplayGrid">
                         <Grid.Background>
-                            <ImageBrush Opacity="0.3" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
+                            <ImageBrush Opacity="1" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
                         </Grid.Background>
-                        <oxy:Plot Name="ForceDiagramPlot">
-                        </oxy:Plot>
                     </Grid>
 
                 </Grid>
@@ -156,15 +150,17 @@
 
         </Grid>
 
-        <Grid Name="BalanceGrid" Grid.Row="2">
+        <Grid Name="BalanceGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450*"/>
+                <ColumnDefinition Width="200*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30*"/>
                 <RowDefinition Height="30*"/>
             </Grid.RowDefinitions>
             <Grid Name="BalanceLogGrid" Grid.Row="0">
-                <DataGrid x:Name="BalancingResultDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
-
-
+                <DataGrid x:Name="BalancingResultDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White"/>
             </Grid>
 
             <Grid Name="BalanceResultGrid" Grid.Row="1">

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using StaticBalancing.ViewModel;
 using System.IO;
 using System.Windows.Threading;
 
 using OxyPlot;
 using OxyPlot.Wpf;
+
+using StaticBalancing.ViewModel;
+using System.Windows.Media.Imaging;
 
 namespace StaticBalancing
 {
@@ -142,20 +143,20 @@ namespace StaticBalancing
             DrawForceVector();
         }
 
-        //TODO
+
         private void DrawForceVector()
         {
             List<ForceVector> fs = mainWindowViewModel.ForceVectors;
-            double maxMag = Double.MinValue;
+            double maxMag = double.MinValue;
             foreach(ForceVector fv in fs)
             {
                 maxMag = Math.Max(Math.Abs(fv.Imbalance), maxMag);
             }
 
-
             // Set OxyPlot Model attributes
+            OxyPlot.Wpf.Plot ForceDiagramPlot = new Plot();
             ForceDiagramPlot.PlotType = PlotType.Polar;
-            ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(2);
+            ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(0);
             ForceDiagramPlot.PlotMargins = new Thickness(0, 0, 0, 0);
 
             AngleAxis axis = new AngleAxis();
@@ -170,8 +171,8 @@ namespace StaticBalancing
             MagnitudeAxis magAxis = new MagnitudeAxis();
             magAxis.Minimum = 0;
             magAxis.Maximum = maxMag * 1.2;
-            magAxis.MajorStep = maxMag / 5;
-            magAxis.MinorStep = maxMag / 5;
+            magAxis.MajorStep = (int) maxMag / 5;
+            magAxis.MinorStep = (int) maxMag / 5;
             magAxis.Angle = 0;
             magAxis.Title = "Magnitude";
 
@@ -196,7 +197,17 @@ namespace StaticBalancing
 
                 ForceDiagramPlot.Series.Add(series);
             }
+
+            ImageSource src = new BitmapImage(new Uri("pack://application:,,,/BindingTest;component/Images/CTRotorWithAngle.png"));
+            ImageBrush backgroud = new ImageBrush(src);
+            backgroud.TileMode = TileMode.FlipX;
+            backgroud.Stretch = Stretch.UniformToFill;
+            backgroud.Opacity = 0.4;
+            ForceDiagramPlot.Background = new ImageBrush();
+
+            ImbalanceDisplayGrid.Children.Add(ForceDiagramPlot);
         }
+
 
         #region Status and Status Bar Control
         // Status Bar Funcs
