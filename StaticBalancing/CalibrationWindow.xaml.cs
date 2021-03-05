@@ -88,6 +88,7 @@ namespace StaticBalancing
 
             if (!isValid)
             {
+                m_mainVM.CalibrationStatus = false;
                 MessageBox.Show("Please set Input Data Path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -126,23 +127,44 @@ namespace StaticBalancing
                 // Compute dataset
                 CalibrationResult result = math.GetCalibrationMatrix(baseRun, m_system.m_balancePos, baseRun, m_system.m_counters, Convert.ToSingle(m_system.m_maxSpeed));
                 m_mainVM.SetCalibrationResult(result);
+
+                // set data to table
+                HistoryData temp = new HistoryData();
+                temp.Imbalance = result.ResidualImblance;
+                temp.Speed = result.Speed;
+                temp.SpeedVariation = result.SpeedVariation;
+                temp.Timestamp = "Current Time";
+                temp.SerialNumber = m_mainVM.SelectedSerialNumber;
+                temp.Angle = result.Phase;
+                temp.ForceAtMaxSpeed = result.ForceAtMaxSpeed;
+                temp.DeWeightMap = new Dictionary<string, double>(result.WeightChange);
+                temp.Model = m_mainVM.SelectedModel;
+                temp.StatusCoef = baseRun;
+                temp.RawData = baseIn;
+
+                m_mainVM.HistoryRecord.Add(temp);
+                m_mainVM.CurrentChoseData = temp;
+                this.DialogResult = true;
             }
             catch (Exception ex)
             {
+                m_mainVM.CalibrationStatus = false;
                 MessageBox.Show("Fail to Calibrate: " + ex.Data, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.Close();
         }
 
+
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            m_mainVM.CalibrationStatus = false;
             this.Close();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

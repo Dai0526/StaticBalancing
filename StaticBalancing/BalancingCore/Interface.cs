@@ -165,7 +165,7 @@ namespace StaticBalancing
         public double ResidualImblance { get; set; }
         public double ForceAtMaxSpeed { get; set; }
 
-        //public SineRegCoef BaseCoef { get; set; }
+        public SineRegCoef BaseCoef { get; set; }
 
         public CalibrationResult(string id = "")
         {
@@ -177,7 +177,7 @@ namespace StaticBalancing
             ForceVectors = new Dictionary<string, ForceVector>();
             ResidualImblance = 0.0;
             ForceAtMaxSpeed = 0.0;
-            //BaseCoef = new SineRegCoef();
+            BaseCoef = new SineRegCoef();
         }
 
     } 
@@ -198,8 +198,30 @@ namespace StaticBalancing
 
     #endregion
 
-    #region GUI
 
-    #endregion
+    public struct HistoryData
+    {
+        public string Model { get; set; }
+
+        public string SerialNumber { get; set; }
+
+        public string Timestamp { get; set; }
+
+        public double Imbalance { get; set; }
+
+        public double Angle { get; set; }
+
+        public double Speed { get; set; }
+
+        public double ForceAtMaxSpeed { get; set; }
+
+        public double SpeedVariation { get; set; }
+
+        public Dictionary<string, double> DeWeightMap { get; set; }
+
+        public SineRegCoef StatusCoef { get; set; }
+
+        public InputRaw RawData { get; set; }
+    }
 
 }

@@ -91,7 +91,7 @@ namespace StaticBalancing
             result.Speed = GetSpeedRpm(currStatus);
             result.SpeedVariation = GetSpeedVariation(currStatus);
             result.Phase = GetPhaseDeg(currStatus);
-
+            result.BaseCoef = currStatus;
             foreach (BalancePosition bp in bpList)
             {
                 ForceVector fv = new ForceVector();

@@ -139,9 +139,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Images\GenericCTRotor.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resource\MatlabFunc\sinefit.m" />
   </ItemGroup>
   <ItemGroup>

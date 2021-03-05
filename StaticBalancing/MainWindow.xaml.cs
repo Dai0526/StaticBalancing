@@ -11,6 +11,7 @@ using OxyPlot.Wpf;
 
 using StaticBalancing.ViewModel;
 using System.Windows.Media.Imaging;
+using System.Data;
 
 namespace StaticBalancing
 {
@@ -140,10 +141,51 @@ namespace StaticBalancing
             CalibrationWindow cw = new CalibrationWindow(ref m_balancer.m_systemSelected, ref mainWindowViewModel);
             cw.ShowDialog();
 
-            DrawForceVector();
+            if(mainWindowViewModel.CalibrationStatus == true)
+            {
+                DrawForceVector();
+                UpdateHistoryDataGrid();
+            }
+
         }
 
+        private void UpdateHistoryDataGrid()
+        {
+            HistoryData curr = mainWindowViewModel.CurrentChoseData;
 
+            DataTable table = new DataTable();
+            table.Columns.Add("Timestamp", typeof(string));
+            table.Columns.Add("Imbalance", typeof(double));
+            table.Columns.Add("Angle", typeof(double));
+            table.Columns.Add("Speed", typeof(double));
+            table.Columns.Add("ForceAtMaxSpeed", typeof(double));
+            foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
+            {
+                table.Columns.Add(kv.Key, typeof(double));
+            }
+
+            foreach (HistoryData hd in mainWindowViewModel.HistoryRecord)
+            {
+                DataRow thisRow = table.NewRow();
+                thisRow["Timestamp"] = hd.Timestamp;
+                thisRow["Imbalance"] = hd.Imbalance;
+                thisRow["Angle"] = hd.Angle;
+                thisRow["Speed"] = hd.Speed;
+                thisRow["ForceAtMaxSpeed"] = hd.ForceAtMaxSpeed;
+
+                foreach (KeyValuePair<string, double> kv in hd.DeWeightMap)
+                {
+                    thisRow[kv.Key] = kv.Value;
+                }
+
+                table.Rows.Add(thisRow);
+            }
+
+            // update dataview
+            HistoryResultDataGrid.ItemsSource = table.DefaultView;
+        }
+
+        #region Draw Plot Functions
         private void DrawForceVector()
         {
             List<ForceVector> fs = mainWindowViewModel.ForceVectors;
@@ -198,16 +240,23 @@ namespace StaticBalancing
                 ForceDiagramPlot.Series.Add(series);
             }
 
-            ImageSource src = new BitmapImage(new Uri("pack://application:,,,/BindingTest;component/Images/CTRotorWithAngle.png"));
+            ImageSource src = new BitmapImage(new Uri("pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png"));
             ImageBrush backgroud = new ImageBrush(src);
             backgroud.TileMode = TileMode.FlipX;
             backgroud.Stretch = Stretch.UniformToFill;
-            backgroud.Opacity = 0.4;
-            ForceDiagramPlot.Background = new ImageBrush();
+            backgroud.Opacity = 0.1;
+            ImbalanceVectorPlotGrid.Background = backgroud;
+            ForceDiagramPlot.Background = backgroud;
 
-            ImbalanceDisplayGrid.Children.Add(ForceDiagramPlot);
+            ImbalanceVectorPlotGrid.Children.Add(ForceDiagramPlot);
         }
 
+
+        private void DrawSpeedVerseAngle()
+        {
+
+        }
+        #endregion
 
         #region Status and Status Bar Control
         // Status Bar Funcs
@@ -235,9 +284,13 @@ namespace StaticBalancing
             m_dispatcherTimer.IsEnabled = false;
         }
 
+
+
         #endregion
 
-
-
+        private void SerialNumValueLabel_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            mainWindowViewModel.SelectedSerialNumber = SerialNumValueLabel.Text;
+        }
     }
 }

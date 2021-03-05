@@ -177,5 +177,41 @@ namespace StaticBalancing.ViewModel
             }
         }
 
+        //bind history result
+        private List<HistoryData> historyRecord = new List<HistoryData>();
+        public List<HistoryData> HistoryRecord
+        {
+            get { return historyRecord; }
+            set
+            {
+                historyRecord = value;
+                OnPropertyChanged(nameof(HistoryRecord));
+            }
+        }
+
+        private HistoryData currentChoseData = new HistoryData();
+        public HistoryData CurrentChoseData
+        {
+            get { return currentChoseData; }
+            set
+            {
+                currentChoseData = value;
+                OnPropertyChanged(nameof(CurrentChoseData));
+            }
+        }
+
+
+        // Calibrate status
+        private bool calibrateStatus = true;
+        public bool CalibrationStatus
+        {
+            get { return calibrateStatus; }
+            set
+            {
+                calibrateStatus = value;
+                OnPropertyChanged(nameof(CalibrationStatus));
+            }
+        }
+
     }
 }
