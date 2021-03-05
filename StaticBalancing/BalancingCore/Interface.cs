@@ -165,6 +165,8 @@ namespace StaticBalancing
         public double ResidualImblance { get; set; }
         public double ForceAtMaxSpeed { get; set; }
 
+        //public SineRegCoef BaseCoef { get; set; }
+
         public CalibrationResult(string id = "")
         {
             Label = id;
@@ -175,6 +177,7 @@ namespace StaticBalancing
             ForceVectors = new Dictionary<string, ForceVector>();
             ResidualImblance = 0.0;
             ForceAtMaxSpeed = 0.0;
+            //BaseCoef = new SineRegCoef();
         }
 
     } 
@@ -182,9 +185,15 @@ namespace StaticBalancing
     public struct ForceVector
     {
         public string ID { get; set; }
-        public double Phase { get; set; }
         public double WeightChange { get; set; }
         public double Imbalance { get; set; }
+        public Vector CoefDiffVector { get; set; }
+    }
+
+    public struct Vector
+    {
+        public double Phase { get; set; }
+        public double Magnitude { get; set; }
     }
 
     #endregion

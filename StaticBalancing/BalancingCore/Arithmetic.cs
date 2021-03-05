@@ -102,8 +102,12 @@ namespace StaticBalancing
                 // get vector 
                 double diffA = bp.LastRunCoef.A - baseline.A;
                 double diffB = bp.LastRunCoef.B - baseline.B;
-                double angle = Math.Atan2(diffB, diffA);
-                fv.Phase = angle;
+
+                Vector dv = new Vector();
+                dv.Phase = Math.Atan2(diffB, diffA);
+                dv.Magnitude = Math.Sqrt(diffA * diffA + diffB * diffB);
+
+                fv.CoefDiffVector = dv;
 
                 result.ForceVectors[bp.ID] = fv;
 
@@ -158,8 +162,8 @@ namespace StaticBalancing
                 double x1 = mag * Math.Cos(phase);
                 double y1 = mag * Math.Sin(phase);
 
-                double x2 = curr.Imbalance * Math.Cos(curr.Phase);
-                double y2 = curr.Imbalance * Math.Sin(curr.Phase);
+                double x2 = curr.Imbalance * Math.Cos(curr.CoefDiffVector.Phase);
+                double y2 = curr.Imbalance * Math.Sin(curr.CoefDiffVector.Phase);
 
                 double x = x1 + x2;
                 double y = y1 + y2;

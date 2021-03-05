@@ -145,7 +145,57 @@ namespace StaticBalancing
         //TODO
         private void DrawForceVector()
         {
+            List<ForceVector> fs = mainWindowViewModel.ForceVectors;
+            double maxMag = Double.MinValue;
+            foreach(ForceVector fv in fs)
+            {
+                maxMag = Math.Max(Math.Abs(fv.Imbalance), maxMag);
+            }
 
+
+            // Set OxyPlot Model attributes
+            ForceDiagramPlot.PlotType = PlotType.Polar;
+            ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(2);
+            ForceDiagramPlot.PlotMargins = new Thickness(0, 0, 0, 0);
+
+            AngleAxis axis = new AngleAxis();
+            axis.Minimum = 0;
+            axis.Maximum = 360;
+            axis.StartAngle = 0;
+            axis.EndAngle = 360;
+            axis.MajorStep = 30;
+            axis.MinorStep = 15;
+            axis.Title = "Angle";
+
+            MagnitudeAxis magAxis = new MagnitudeAxis();
+            magAxis.Minimum = 0;
+            magAxis.Maximum = maxMag * 1.2;
+            magAxis.MajorStep = maxMag / 5;
+            magAxis.MinorStep = maxMag / 5;
+            magAxis.Angle = 0;
+            magAxis.Title = "Magnitude";
+
+            ForceDiagramPlot.Axes.Add(axis);
+            ForceDiagramPlot.Axes.Add(magAxis);
+
+            // Add Data Point
+            foreach(ForceVector fv in fs)
+            {
+                DataPoint start = new DataPoint(0, 0);
+                DataPoint end = new DataPoint(fv.Imbalance, fv.CoefDiffVector.Phase / Math.PI * 180);
+
+                OxyPlot.Wpf.Series series = new OxyPlot.Wpf.LineSeries();
+                series.Title = fv.ID;
+
+                // set force vector
+                List<DataPoint> dps = new List<DataPoint>();
+                dps.Add(start);
+                dps.Add(end);
+
+                series.ItemsSource = dps;
+
+                ForceDiagramPlot.Series.Add(series);
+            }
         }
 
         #region Status and Status Bar Control

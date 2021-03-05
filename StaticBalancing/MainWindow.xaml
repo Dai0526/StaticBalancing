@@ -145,10 +145,9 @@
                 <Grid Name="RotorDiagramGrid" Grid.Column="1">
                     <Grid Name ="ImbalanceDisplayGrid">
                         <Grid.Background>
-                            <ImageBrush Opacity="0.4" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
+                            <ImageBrush Opacity="0.3" ImageSource="pack://application:,,,/StaticBalancing;component/Resource/Images/CTRotorWithAngle.png" Stretch="UniformToFill" TileMode="FlipX"/>
                         </Grid.Background>
-                        <oxy:Plot>
-                            
+                        <oxy:Plot Name="ForceDiagramPlot">
                         </oxy:Plot>
                     </Grid>
 
