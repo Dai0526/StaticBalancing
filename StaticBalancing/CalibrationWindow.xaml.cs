@@ -133,7 +133,7 @@ namespace StaticBalancing
                 temp.Imbalance = result.ResidualImblance;
                 temp.Speed = result.Speed;
                 temp.SpeedVariation = result.SpeedVariation;
-                temp.Timestamp = "Current Time";
+                temp.Timestamp = GetCurrentTimestamp();
                 temp.SerialNumber = m_mainVM.SelectedSerialNumber;
                 temp.Angle = result.Phase;
                 temp.ForceAtMaxSpeed = result.ForceAtMaxSpeed;
@@ -155,7 +155,11 @@ namespace StaticBalancing
             this.Close();
         }
 
-
+        private string GetCurrentTimestamp()
+        {
+            DateTime now = DateTime.Now;
+            return now.ToString("yyyy-MM-dd HH:mm:ss");
+        }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {

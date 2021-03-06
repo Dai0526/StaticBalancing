@@ -160,7 +160,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid Name="BalanceLogGrid" Grid.Row="0">
-                    <DataGrid x:Name="HistoryResultDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White"/>
+                    <DataGrid SelectionChanged="HistoryResultDataGrid_SelectionChanged" x:Name="HistoryResultDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White" SelectionUnit="FullRow"></DataGrid>
                 </Grid>
                 
                 <Grid Name="BalanceSinusoidPlotGrid" Grid.Row="1">

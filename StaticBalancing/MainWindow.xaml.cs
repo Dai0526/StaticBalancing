@@ -254,6 +254,27 @@ namespace StaticBalancing
 
         private void DrawSpeedVerseAngle()
         {
+            HistoryData data = mainWindowViewModel.CurrentChoseData;
+            // Set OxyPlot Model attributes
+            OxyPlot.Wpf.Plot ForceDiagramPlot = new Plot();
+            ForceDiagramPlot.PlotType = PlotType.Cartesian;
+            ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(0);
+            ForceDiagramPlot.PlotMargins = new Thickness(0, 0, 0, 0);
+
+            LinearAxis axis = new LinearAxis();
+            axis.Minimum = 0;
+            axis.Maximum = 360;
+            axis.MajorStep = 90;
+            axis.MinorStep = 5;
+            axis.Title = "Angle";
+
+            MagnitudeAxis magAxis = new MagnitudeAxis();
+            magAxis.Minimum = 0;
+            magAxis.Maximum = maxMag * 1.2;
+            magAxis.MajorStep = (int)maxMag / 5;
+            magAxis.MinorStep = (int)maxMag / 5;
+            magAxis.Angle = 0;
+            magAxis.Title = "Magnitude";
 
         }
         #endregion
@@ -291,6 +312,11 @@ namespace StaticBalancing
         private void SerialNumValueLabel_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             mainWindowViewModel.SelectedSerialNumber = SerialNumValueLabel.Text;
+        }
+
+        private void HistoryResultDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
