@@ -12,6 +12,7 @@ using OxyPlot.Wpf;
 using StaticBalancing.ViewModel;
 using System.Windows.Media.Imaging;
 using System.Data;
+using System.Windows.Controls;
 
 namespace StaticBalancing
 {
@@ -145,6 +146,7 @@ namespace StaticBalancing
             {
                 DrawForceVector();
                 UpdateHistoryDataGrid();
+                DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
             }
 
         }
@@ -155,10 +157,13 @@ namespace StaticBalancing
 
             DataTable table = new DataTable();
             table.Columns.Add("Timestamp", typeof(string));
+            table.Columns.Add("Status", typeof(string));
             table.Columns.Add("Imbalance", typeof(double));
             table.Columns.Add("Angle", typeof(double));
             table.Columns.Add("Speed", typeof(double));
             table.Columns.Add("ForceAtMaxSpeed", typeof(double));
+
+
             foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
             {
                 table.Columns.Add(kv.Key, typeof(double));
@@ -168,22 +173,27 @@ namespace StaticBalancing
             {
                 DataRow thisRow = table.NewRow();
                 thisRow["Timestamp"] = hd.Timestamp;
-                thisRow["Imbalance"] = hd.Imbalance;
-                thisRow["Angle"] = hd.Angle;
-                thisRow["Speed"] = hd.Speed;
-                thisRow["ForceAtMaxSpeed"] = hd.ForceAtMaxSpeed;
+                thisRow["Imbalance"] = Math.Round(hd.Imbalance, 6);
+                thisRow["Status"] = hd.BalanceStats.ToString();
+                thisRow["Angle"] = Math.Round(hd.Angle, 6);
+                thisRow["Speed"] = Math.Round(hd.Speed, 6);
+                thisRow["ForceAtMaxSpeed"] = Math.Round(hd.ForceAtMaxSpeed, 6);
+
 
                 foreach (KeyValuePair<string, double> kv in hd.DeWeightMap)
                 {
-                    thisRow[kv.Key] = kv.Value;
+                    thisRow[kv.Key] = Math.Round(kv.Value, 6);
                 }
-
+                
                 table.Rows.Add(thisRow);
             }
 
             // update dataview
             HistoryResultDataGrid.ItemsSource = table.DefaultView;
         }
+
+        // highlight color
+
 
         #region Draw Plot Functions
         private void DrawForceVector()
@@ -199,7 +209,7 @@ namespace StaticBalancing
             OxyPlot.Wpf.Plot ForceDiagramPlot = new Plot();
             ForceDiagramPlot.PlotType = PlotType.Polar;
             ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(0);
-            ForceDiagramPlot.PlotMargins = new Thickness(0, 0, 0, 0);
+            ForceDiagramPlot.PlotMargins = new Thickness(25, 25, 25, 25);
 
             AngleAxis axis = new AngleAxis();
             axis.Minimum = 0;
@@ -252,29 +262,47 @@ namespace StaticBalancing
         }
 
 
-        private void DrawSpeedVerseAngle()
+        private void DrawSpeedVerseAngle(HistoryData data)
         {
-            HistoryData data = mainWindowViewModel.CurrentChoseData;
-            // Set OxyPlot Model attributes
-            OxyPlot.Wpf.Plot ForceDiagramPlot = new Plot();
-            ForceDiagramPlot.PlotType = PlotType.Cartesian;
-            ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(0);
-            ForceDiagramPlot.PlotMargins = new Thickness(0, 0, 0, 0);
+            PlotModel model = new PlotModel();
+            model.Title = data.Timestamp;
+            model.LegendPosition = LegendPosition.RightBottom;
+            model.LegendPlacement = LegendPlacement.Outside;
+            model.LegendOrientation = LegendOrientation.Horizontal;
 
-            LinearAxis axis = new LinearAxis();
-            axis.Minimum = 0;
-            axis.Maximum = 360;
-            axis.MajorStep = 90;
-            axis.MinorStep = 5;
-            axis.Title = "Angle";
+            double A = data.StatusCoef.A, B = data.StatusCoef.B, C = data.StatusCoef.C;
+            OxyPlot.Series.FunctionSeries serie = new OxyPlot.Series.FunctionSeries();
+            for (int angle = 0; angle < 360; angle += 1)
+            {
+                double x = (double)angle;
+                double y = A * Math.Cos(x * Math.PI / 180) + B * Math.Sin(x * Math.PI / 180) + C;
+                DataPoint dp = new DataPoint(x, y);
+                serie.Points.Add(dp);
+            }
 
-            MagnitudeAxis magAxis = new MagnitudeAxis();
-            magAxis.Minimum = 0;
-            magAxis.Maximum = maxMag * 1.2;
-            magAxis.MajorStep = (int)maxMag / 5;
-            magAxis.MinorStep = (int)maxMag / 5;
-            magAxis.Angle = 0;
-            magAxis.Title = "Magnitude";
+            model.Series.Add(serie);
+
+            OxyPlot.Axes.LinearAxis Yaxis = new OxyPlot.Axes.LinearAxis();
+            Yaxis.MajorStep = 0.5;
+            Yaxis.MinorStep = 0.1;
+            Yaxis.MajorGridlineStyle = LineStyle.Automatic;
+            Yaxis.Title = "Speed (rpm)";
+
+            OxyPlot.Axes.LinearAxis Xaxis = new OxyPlot.Axes.LinearAxis
+            {
+                Position = OxyPlot.Axes.AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = 360,
+                MinorStep = 30,
+                MajorStep = 90
+            };
+
+            Xaxis.Title = "Angle";
+
+            model.Axes.Add(Xaxis);
+            model.Axes.Add(Yaxis);
+
+            DataPlotView.Model = model;
 
         }
         #endregion

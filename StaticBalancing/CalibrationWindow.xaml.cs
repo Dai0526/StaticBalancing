@@ -95,7 +95,6 @@ namespace StaticBalancing
 
             try
             {
-
                 // calculation
                 DataHandler dh = new DataHandler();
                 Arithmetic math = new Arithmetic();
@@ -141,9 +140,11 @@ namespace StaticBalancing
                 temp.Model = m_mainVM.SelectedModel;
                 temp.StatusCoef = baseRun;
                 temp.RawData = baseIn;
+                temp.BalanceStats = temp.Imbalance > m_mainVM.SelectedModelMaxImba ? BALANCE_STATUS.FAILED : BALANCE_STATUS.SUCCESS;
 
                 m_mainVM.HistoryRecord.Add(temp);
                 m_mainVM.CurrentChoseData = temp;
+
                 this.DialogResult = true;
             }
             catch (Exception ex)

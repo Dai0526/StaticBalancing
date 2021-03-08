@@ -105,27 +105,27 @@
 
                         <Grid Grid.Row="0">
                             <Label x:Name="CaliSpeedNameLabel" Content="Speed(rpm)" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="72" Height="37"/>
-                            <Label x:Name="CaliSpeedValueLabel" Content="{Binding Path=CalibrationResult.Speed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="77,10,0,0" VerticalAlignment="Top" Width="97" Height="37"/>
+                            <Label x:Name="CaliSpeedValueLabel" Content="{Binding Path=CalibrationResult.Speed, StringFormat={}{0:F4}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="77,10,0,0" VerticalAlignment="Top" Width="97" Height="37"/>
 
                             <Label x:Name="CaliSpeedVarNameLabel" Content="Speed Variation" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="94" Height="37"/>
-                            <Label x:Name="CaliSpeedVarValueLabel" Content="{Binding Path=CalibrationResult.SpeedVariation, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top" Width="96" Height="37"/>
+                            <Label x:Name="CaliSpeedVarValueLabel" Content="{Binding Path=CalibrationResult.SpeedVariation, StringFormat={}{0:F4}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top" Width="96" Height="37"/>
 
                             <Label x:Name="CaliPhaseNameLabel" Content="Phase" HorizontalAlignment="Left" Margin="240,42,0,0" VerticalAlignment="Top" Width="49" Height="37"/>
-                            <Label x:Name="CaliPhaseValueLabel" Content="{Binding Path=CalibrationResult.Phase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="291,42,0,0" VerticalAlignment="Top" Width="99" Height="37"/>
+                            <Label x:Name="CaliPhaseValueLabel" Content="{Binding Path=CalibrationResult.Phase, StringFormat={}{0:F4},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="291,42,0,0" VerticalAlignment="Top" Width="99" Height="37"/>
 
                             <Label x:Name="CaliResImbaNameLabel" Content="Residual Imblance (g*m)" HorizontalAlignment="Left" Margin="5,42,0,0" VerticalAlignment="Top" Width="139" Height="37"/>
-                            <Label x:Name="CaliResImbaValueLabel" Content="{Binding Path=CalibrationResult.ResidualImblance, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="144,42,0,0" VerticalAlignment="Top" Width="96" Height="37" RenderTransformOrigin="0.507,0.486"/>
+                            <Label x:Name="CaliResImbaValueLabel" Content="{Binding Path=CalibrationResult.ResidualImblance, StringFormat={}{0:F4}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="144,42,0,0" VerticalAlignment="Top" Width="96" Height="37" RenderTransformOrigin="0.507,0.486"/>
 
                             <Label x:Name="CaliFMaxSpeedNameLabel" Content="Force @Max Speed (N)" HorizontalAlignment="Left" Margin="5,84,0,-0.2" VerticalAlignment="Top" Width="132" Height="37"/>
-                            <Label x:Name="CaliFMaxSpeedValueLabel" Content="{Binding Path=CalibrationResult.ForceAtMaxSpeed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="144,84,0,-0.2" VerticalAlignment="Top" Width="91" Height="37"/>
+                            <Label x:Name="CaliFMaxSpeedValueLabel" Content="{Binding Path=CalibrationResult.ForceAtMaxSpeed, StringFormat={}{0:F4}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="144,84,0,-0.2" VerticalAlignment="Top" Width="91" Height="37"/>
                         </Grid>
                         <Grid Grid.Row="1">
                             <DataGrid Name="ForceVectorDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="WhiteSmoke" ItemsSource="{Binding Path=ForceVectors, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Balance Position" Width="5*" Binding="{Binding ID}"/>
-                                    <DataGridTextColumn Header="Phase" Width="3*" Binding="{Binding CoefDiffVector.Phase}"/>
-                                    <DataGridTextColumn Header="Weight Change(kg)" Width="5*" Binding="{Binding WeightChange}"/>
-                                    <DataGridTextColumn Header="Imbalance (g*m)" Width="5*" Binding="{Binding Imbalance}"/>
+                                    <DataGridTextColumn Header="Phase" Width="3*" Binding="{Binding CoefDiffVector.Phase, StringFormat={}{0:F4}}"/>
+                                    <DataGridTextColumn Header="Weight Change(kg)" Width="5*" Binding="{Binding WeightChange, StringFormat={}{0:F4}}"/>
+                                    <DataGridTextColumn Header="Imbalance (g*m)" Width="5*" Binding="{Binding Imbalance, StringFormat={}{0:F4}}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
@@ -149,10 +149,10 @@
 
         <Grid Name="HisotryDataGrid" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="700"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="750"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid Name="BalancingDataGrid" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="200"/>
@@ -160,17 +160,29 @@
                 </Grid.RowDefinitions>
 
                 <Grid Name="BalanceLogGrid" Grid.Row="0">
-                    <DataGrid SelectionChanged="HistoryResultDataGrid_SelectionChanged" x:Name="HistoryResultDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White" SelectionUnit="FullRow"></DataGrid>
+                    <DataGrid SelectionChanged="HistoryResultDataGrid_SelectionChanged" x:Name="HistoryResultDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White" SelectionUnit="FullRow">
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="SUCCESS_COLOR" Color="LightGreen" />
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="SUCCESS">
+                                        <Setter Property="Background" Value="{StaticResource SUCCESS_COLOR}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                    </DataGrid>
                 </Grid>
-                
+
                 <Grid Name="BalanceSinusoidPlotGrid" Grid.Row="1">
-                    
+                    <oxy:PlotView Name ="DataPlotView"/>
                 </Grid>
             </Grid>
 
-            <Grid Name="HistoryDataOperationGrid" Grid.Column="1">
-
-            </Grid>
+            <Grid Name="HistoryDataOperationGrid" Grid.Column="1"/>
 
         </Grid>
 

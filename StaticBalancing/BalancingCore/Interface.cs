@@ -144,6 +144,12 @@ namespace StaticBalancing
     #endregion
 
     #region Arithmetic
+    public enum BALANCE_STATUS
+    {
+        SUCCESS = 0,
+        FAILED = 1
+    }
+
     public struct SineRegCoef
     {
         public double A;
@@ -222,6 +228,8 @@ namespace StaticBalancing
         public SineRegCoef StatusCoef { get; set; }
 
         public InputRaw RawData { get; set; }
+
+        public BALANCE_STATUS BalanceStats { get; set; }
     }
 
 }
