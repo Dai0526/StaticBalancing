@@ -178,8 +178,8 @@ namespace StaticBalancing.ViewModel
         }
 
         //bind history result
-        private List<HistoryData> historyRecord = new List<HistoryData>();
-        public List<HistoryData> HistoryRecord
+        private List<MeasurementData> historyRecord = new List<MeasurementData>();
+        public List<MeasurementData> HistoryRecord
         {
             get { return historyRecord; }
             set
@@ -189,8 +189,8 @@ namespace StaticBalancing.ViewModel
             }
         }
 
-        private HistoryData currentChoseData = new HistoryData();
-        public HistoryData CurrentChoseData
+        private MeasurementData currentChoseData = new MeasurementData();
+        public MeasurementData CurrentChoseData
         {
             get { return currentChoseData; }
             set

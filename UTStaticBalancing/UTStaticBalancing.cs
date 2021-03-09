@@ -84,13 +84,13 @@ namespace UTStaticBalancing
             SineRegCoef coefL = math.GetRegressionCoef(L);
             SineRegCoef coefR = math.GetRegressionCoef(R);
 
-            Left.LastRunCoef = coefL;
-            Right.LastRunCoef = coefR;
+            Left.CalibrationRunCoef = coefL;
+            Right.CalibrationRunCoef = coefR;
 
             sys.m_balancePos.Add(Left);
             sys.m_balancePos.Add(Right);
 
-            CalibrationResult result = math.GetCalibrationMatrix(coef0, sys.m_balancePos, coef0, counterSpec, 240);
+            CalibrationResult result = math.Calibrate(coef0, sys.m_balancePos, coef0, counterSpec, 240);
 
         }
 

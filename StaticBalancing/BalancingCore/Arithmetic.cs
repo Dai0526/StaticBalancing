@@ -39,6 +39,52 @@ namespace StaticBalancing
             return coef;
         }
 
+        public Matrix<double> GetCoefMatrix(SineRegCoef baseline, List<BalancePosition> bpList)
+        {
+            // set up M
+            List<double> dAs = new List<double>();
+            List<double> dBs = new List<double>();
+
+            foreach (BalancePosition bp in bpList)
+            {
+                double diffA = bp.CalibrationRunCoef.A - baseline.A;
+                double diffB = bp.CalibrationRunCoef.B - baseline.B;
+
+                dAs.Add(diffA);
+                dBs.Add(diffB);
+            }
+
+            // set up M
+            Matrix<double> M = Matrix<double>.Build.DenseOfRowArrays(dAs.ToArray(), dBs.ToArray());
+            M = M.Inverse().Multiply(-1.0);
+
+            return M;
+        }
+
+        public Dictionary<string, double> SolveCalibrationMatrix(Matrix<double> M, SineRegCoef currStatus, List<BalancePosition> bpList)
+        {
+            //Set up b
+            List<double> curr = new List<double>();
+            curr.Add(currStatus.A);
+            curr.Add(currStatus.B);
+            Matrix<double> b = Matrix<double>.Build.DenseOfColumnArrays(curr.ToArray());
+
+            // solve for x
+            Matrix<double> x = M.Multiply(b); // it is 1 column matrix
+
+            double[] ans = x.ToColumnArrays()[0];
+
+            Dictionary<string, double> item = new Dictionary<string, double>();
+
+            for (int i = 0; i < ans.Count(); ++i)
+            {
+                item[bpList[i].ID] = ans[i];
+            }
+
+            return item;
+        }
+
+
         /*
         * Matrix M = 
             [dA_Left  dA_Right]
@@ -51,43 +97,14 @@ namespace StaticBalancing
             x=-(M^-1)b
 
         */
-        public CalibrationResult GetCalibrationMatrix(SineRegCoef baseline, List<BalancePosition> bpList, SineRegCoef currStatus, Dictionary<string, Counter> counterSpec, float maxSpeed)
+        public CalibrationResult Calibrate(SineRegCoef baseline, List<BalancePosition> bpList, SineRegCoef currStatus, Dictionary<string, Counter> counterSpec, float maxSpeed)
         {
-            // set up M
-            List<double> dAs = new List<double>();
-            List<double> dBs = new List<double>();
+            Matrix<double> M = GetCoefMatrix(baseline, bpList);
+            Dictionary<string, double> item = SolveCalibrationMatrix(M, currStatus, bpList);
 
-            foreach(BalancePosition bp in bpList)
-            {
-                double diffA = bp.LastRunCoef.A - baseline.A;
-                double diffB = bp.LastRunCoef.B - baseline.B;
-
-                dAs.Add(diffA);
-                dBs.Add(diffB);
-            }
-
-            List<double> curr = new List<double>();
-            curr.Add(currStatus.A);
-            curr.Add(currStatus.B);
-
-            // set up M
-            Matrix<double> M = Matrix<double>.Build.DenseOfRowArrays(dAs.ToArray(), dBs.ToArray());
-            M = M.Inverse().Multiply(-1.0);
-            //Set up b
-            Matrix<double> b = Matrix<double>.Build.DenseOfColumnArrays(curr.ToArray());
-            // solve for x
-            Matrix<double> x = M.Multiply(b); // it is 1 column matrix
-
-            double[] ans = x.ToColumnArrays()[0];
-
-            Dictionary<string, double> item = new Dictionary<string, double>();
-
-            for(int i = 0; i < ans.Count(); ++i)
-            {
-                item[bpList[i].ID] = ans[i];
-            }
-
-            CalibrationResult result = new CalibrationResult("Timestamp");
+            CalibrationResult result = new CalibrationResult(GetCurrentTimestamp());
+            result.CalibrationMatrix = M;
+            
             result.Speed = GetSpeedRpm(currStatus);
             result.SpeedVariation = GetSpeedVariation(currStatus);
             result.Phase = GetPhaseDeg(currStatus);
@@ -100,8 +117,8 @@ namespace StaticBalancing
                 fv.WeightChange = item[bp.ID] * bp.GetWeight(counterSpec);
 
                 // get vector 
-                double diffA = bp.LastRunCoef.A - baseline.A;
-                double diffB = bp.LastRunCoef.B - baseline.B;
+                double diffA = bp.CalibrationRunCoef.A - baseline.A;
+                double diffB = bp.CalibrationRunCoef.B - baseline.B;
 
                 Vector dv = new Vector();
                 dv.Phase = Math.Atan2(diffB, diffA);
@@ -120,6 +137,48 @@ namespace StaticBalancing
 
             return result;
         }
+
+        public MeasurementData Measure(SineRegCoef baseline, Matrix<double> CaliMatrix, SineRegCoef measureCoef, List<BalancePosition> bpList, Dictionary<string, Counter> counterSpec, float maxSpeed)
+        {
+            Dictionary<string, double> item = SolveCalibrationMatrix(CaliMatrix, measureCoef, bpList);
+
+            MeasurementData result = new MeasurementData();
+            result.Timestamp = GetCurrentTimestamp();
+            result.Speed = GetSpeedRpm(measureCoef);
+            result.SpeedVariation = GetSpeedVariation(measureCoef);
+            result.Angle = GetPhaseDeg(measureCoef);
+            result.StatusCoef = measureCoef;
+            result.DeWeightMap = new Dictionary<string, double>();
+
+            List<ForceVector> fvs = new List<ForceVector>();
+            foreach (BalancePosition bp in bpList)
+            {
+                ForceVector fv = new ForceVector();
+                fv.ID = bp.ID;
+                fv.Imbalance = item[bp.ID] * bp.GetAppliedImbalance(counterSpec);
+                fv.WeightChange = item[bp.ID] * bp.GetWeight(counterSpec);
+
+                // get vector 
+                double diffA = bp.CalibrationRunCoef.A - baseline.A;
+                double diffB = bp.CalibrationRunCoef.B - baseline.B;
+
+                Vector dv = new Vector();
+                dv.Phase = Math.Atan2(diffB, diffA);
+                dv.Magnitude = Math.Sqrt(diffA * diffA + diffB * diffB);
+
+                fv.CoefDiffVector = dv;
+                fvs.Add(fv);
+
+                
+                result.DeWeightMap[bp.ID] = fv.WeightChange;
+            }
+
+            result.Imbalance = GetResidualImbalance(fvs);
+            result.ForceAtMaxSpeed = result.Imbalance / 1000 * Math.Pow(maxSpeed * Math.PI / 30.0, 2);
+
+            return result;
+        }
+
 
         public double GetPhaseDeg(SineRegCoef coef)
         {
@@ -175,6 +234,11 @@ namespace StaticBalancing
             return mag;
         }
 
+        public static string GetCurrentTimestamp()
+        {
+            DateTime now = DateTime.Now;
+            return now.ToString("yyyy-MM-dd HH:mm:ss");
+        }
     }
 
 

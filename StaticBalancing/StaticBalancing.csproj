@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="ViewModel\CalibrationViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MeasureWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="CalibrationWindow.xaml">
       <SubType>Designer</SubType>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StaticBalancing"
         xmlns:VM="clr-namespace:StaticBalancing.ViewModel"
         mc:Ignorable="d"
-        Title="Add Measure" Closing="Window_Closing" Height="550" Width="450" ResizeMode="NoResize">
+        Title="Add Measure" Closing="Window_Closing" Height="550" Width="500" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -15,20 +15,20 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Label Content="DataPath" FontSize="14" Padding="5" Margin="10,10,363.2,20"/>
-            <TextBox Name="DataPathTextbox" IsReadOnly="True" Width="280" Margin="85,10,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            <Button Name="BrowseButton" Content="Browse" Margin="370,10,0,0" Height="30" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left" Click="BrowseButton_Click"/>
+            <Label Content="Data Path" FontSize="14" Padding="5" Margin="10,10,363.2,20"/>
+            <TextBox Name="DataPathTextbox" IsReadOnly="True" Width="280" Margin="89,10,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Button Name="BrowseButton" Content="Browse" Margin="392,10,0,0" Height="30" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left" Click="BrowseButton_Click" RenderTransformOrigin="1.268,0.4"/>
         </Grid>
 
         <Grid Grid.Row="1">
-            <TreeView x:Name="MainTreeView" ItemsSource="{Binding CalibrationDataSet}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <TreeView x:Name="MainTreeView" ItemsSource="{Binding MeasureDataSet}" ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="True"/>
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Counters}" DataType="{x:Type VM:CalibrationData}">
+                    <HierarchicalDataTemplate ItemsSource="{Binding Counters}" DataType="{x:Type VM:MeasureData}">
                         <Grid>
                             <StackPanel Orientation="Horizontal" Height="40">
                                 <Label Content="{Binding BalancePosition}" Width="80" FontSize="14" Padding="5"/>
@@ -36,7 +36,7 @@
                         </Grid>
 
                         <HierarchicalDataTemplate.ItemTemplate>
-                            <DataTemplate DataType="{x:Type VM:CaliCounter}">
+                            <DataTemplate DataType="{x:Type VM:MeasureCounter}">
                                 <StackPanel Orientation="Horizontal" Height="40">
                                     <Label Content="{Binding PartName}" Width="80" FontSize="12" Padding="5"/>
                                     <Label Content="{Binding Mass}" Width="30" FontSize="12"/>
@@ -52,7 +52,7 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <Button x:Name="CalibrateButton" Content="Calibrate" Height="26" HorizontalAlignment="Left" Margin="30,7,0,0" VerticalAlignment="Top" Width="90" Click="CalibrateButton_Click"/>
+            <Button x:Name="AddButton" Content="Add" Height="26" HorizontalAlignment="Left" Margin="30,7,0,0" VerticalAlignment="Top" Width="90" Click="AddButton_Click"/>
             <Button x:Name="CancelButton" Content="Cancel" Height="26" HorizontalAlignment="Right" Margin="0,7,30,0" VerticalAlignment="Top" Width="90" Click="CancelButton_Click"/>
         </Grid>
     </Grid>

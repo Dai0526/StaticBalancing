@@ -132,7 +132,8 @@ namespace StaticBalancing
 
         private void UpdateHistoryDataGrid()
         {
-            HistoryData curr = mainWindowViewModel.CurrentChoseData;
+            // set up table header
+            MeasurementData curr = mainWindowViewModel.CurrentChoseData;
 
             DataTable table = new DataTable();
             table.Columns.Add("Timestamp", typeof(string));
@@ -140,15 +141,25 @@ namespace StaticBalancing
             table.Columns.Add("Imbalance", typeof(double));
             table.Columns.Add("Angle", typeof(double));
             table.Columns.Add("Speed", typeof(double));
+            table.Columns.Add("Speed Variation(%)", typeof(double));
             table.Columns.Add("ForceAtMaxSpeed", typeof(double));
 
+            string WEIGHT = "Weight";
+            string WEIGHT_CHANGE = "dWeight";
 
             foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
             {
-                table.Columns.Add(kv.Key, typeof(double));
+                table.Columns.Add(WEIGHT + " " + kv.Key, typeof(double));
             }
 
-            foreach (HistoryData hd in mainWindowViewModel.HistoryRecord)
+            foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
+            {
+                table.Columns.Add(WEIGHT_CHANGE + " " + kv.Key, typeof(double));
+            }
+
+
+            // Fill with value
+            foreach (MeasurementData hd in mainWindowViewModel.HistoryRecord)
             {
                 DataRow thisRow = table.NewRow();
                 thisRow["Timestamp"] = hd.Timestamp;
@@ -156,14 +167,20 @@ namespace StaticBalancing
                 thisRow["Status"] = hd.BalanceStats.ToString();
                 thisRow["Angle"] = Math.Round(hd.Angle, 6);
                 thisRow["Speed"] = Math.Round(hd.Speed, 6);
+                thisRow["Speed Variation(%)"] = Math.Round(hd.SpeedVariation * 100, 6);
                 thisRow["ForceAtMaxSpeed"] = Math.Round(hd.ForceAtMaxSpeed, 6);
 
 
                 foreach (KeyValuePair<string, double> kv in hd.DeWeightMap)
                 {
-                    thisRow[kv.Key] = Math.Round(kv.Value, 6);
+                    thisRow[WEIGHT_CHANGE + " " + kv.Key] = Math.Round(kv.Value, 6);
                 }
-                
+
+                foreach (KeyValuePair<string, double> kv in hd.WeightMap)
+                {
+                    thisRow[WEIGHT + " " + kv.Key] = Math.Round(kv.Value, 6);
+                }
+
                 table.Rows.Add(thisRow);
             }
 
@@ -238,8 +255,8 @@ namespace StaticBalancing
             ImbalanceVectorPlotGrid.Children.Add(ForceDiagramPlot);
         }
 
-
-        private void DrawSpeedVerseAngle(HistoryData data)
+   
+        private void DrawSpeedVerseAngle(MeasurementData data)
         {
             PlotModel model = new PlotModel();
             model.Title = data.Timestamp;
@@ -249,10 +266,17 @@ namespace StaticBalancing
 
             double A = data.StatusCoef.A, B = data.StatusCoef.B, C = data.StatusCoef.C;
             OxyPlot.Series.FunctionSeries serie = new OxyPlot.Series.FunctionSeries();
+
+            double minY = double.MaxValue;
+            double maxY = double.MinValue;
             for (int angle = 0; angle < 360; angle += 1)
             {
                 double x = (double)angle;
                 double y = A * Math.Cos(x * Math.PI / 180) + B * Math.Sin(x * Math.PI / 180) + C;
+
+                minY = Math.Min(y, minY);
+                maxY = Math.Max(y, maxY);
+
                 DataPoint dp = new DataPoint(x, y);
                 serie.Points.Add(dp);
             }
@@ -260,9 +284,12 @@ namespace StaticBalancing
             model.Series.Add(serie);
 
             OxyPlot.Axes.LinearAxis Yaxis = new OxyPlot.Axes.LinearAxis();
-            Yaxis.MajorStep = 0.5;
-            Yaxis.MinorStep = 0.1;
-            Yaxis.MajorGridlineStyle = LineStyle.Automatic;
+            Yaxis.Minimum = minY - 1.5;
+            Yaxis.Maximum = maxY + 1.5;
+            Yaxis.MajorStep = 1;
+            Yaxis.MinorStep = 0.2;
+            Yaxis.MajorGridlineStyle = LineStyle.Solid;
+            Yaxis.MinorGridlineStyle = LineStyle.Dot;
             Yaxis.Title = "Speed (rpm)";
             Yaxis.IsZoomEnabled = false;
 
@@ -271,7 +298,7 @@ namespace StaticBalancing
                 Position = OxyPlot.Axes.AxisPosition.Bottom,
                 Minimum = 0,
                 Maximum = 360,
-                MinorStep = 30,
+                MinorStep = 5,
                 MajorStep = 90,
                 IsZoomEnabled = false
             };
@@ -323,7 +350,22 @@ namespace StaticBalancing
 
         private void HistoryResultDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            if(HistoryResultDataGrid.SelectedItem == null)
+            {
+                return;
+            }
 
+            DataRowView dtr = (HistoryResultDataGrid.SelectedItem as DataRowView);
+            string selectedTimestamp = (string)dtr.Row[0];
+
+            foreach(MeasurementData md in mainWindowViewModel.HistoryRecord)
+            {
+                if(string.Compare(md.Timestamp, selectedTimestamp,true) == 0)
+                {
+                    mainWindowViewModel.CurrentChoseData = md;
+                    DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
+                }
+            }
         }
 
         private void CalibrateButton_Click(object sender, RoutedEventArgs e)
@@ -351,12 +393,59 @@ namespace StaticBalancing
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            int idx = HistoryResultDataGrid.SelectedIndex;
 
+            if (idx == -1)
+            {
+                MessageBox.Show("Please select an Data entry to delete.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            DataRowView dtr = (HistoryResultDataGrid.SelectedItem as DataRowView);
+            string selectedTimestamp = (string)dtr.Row[0];
+
+            MessageBoxResult res = MessageBox.Show("Do you want to delete [" + selectedTimestamp + "]", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+
+            if (res == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+
+
+            foreach (MeasurementData md in mainWindowViewModel.HistoryRecord)
+            {
+                if (string.Compare(md.Timestamp, selectedTimestamp, true) == 0)
+                {
+                    // remove founded item
+                    mainWindowViewModel.HistoryRecord.Remove(md);
+                    UpdateHistoryDataGrid();
+                    // Clear view
+                    ClearSpeedVsAnglePlot();
+                    return;
+                }
+            }
+
+
+        }
+
+        private void ClearSpeedVsAnglePlot()
+        {
+            PlotModel empty = new PlotModel();
+            empty.Title = "None";
+            DataPlotView.Model = empty;
         }
 
         private void MeasureButton_Click(object sender, RoutedEventArgs e)
         {
+            MeasureWindow mw = new MeasureWindow(ref m_balancer.m_systemSelected, ref mainWindowViewModel);
+            mw.ShowDialog();
 
+            if(mw.DialogResult == true)
+            {
+                UpdateHistoryDataGrid();
+                DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
+                HistoryResultDataGrid.SelectedIndex = -1;
+            }
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)

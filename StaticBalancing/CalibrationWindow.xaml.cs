@@ -107,11 +107,11 @@ namespace StaticBalancing
                 for (int i = 1; i < m_caliViewModel.CalibrationDataSet.Count(); ++i)
                 {
                     CalibrationData curr = m_caliViewModel.CalibrationDataSet[i];
-                    InputRaw raw = dh.LoadDataFromCSV(curr.InputDataPath);
+                    InputRaw raw = dh.LoadData(curr.InputDataPath);
                     SineRegCoef coef = math.GetRegressionCoef(raw);
 
                     BalancePosition bp = m_system.m_balancePos[i - 1];
-                    bp.LastRunCoef = coef;
+                    bp.CalibrationRunCoef = coef;
                     bp.Counters = new Dictionary<string, int>();
 
                     foreach (CaliCounter cc in curr.Counters)
@@ -123,12 +123,12 @@ namespace StaticBalancing
                     m_system.m_balancePos[i - 1] = bp;
                 }
 
-                // Compute dataset
-                CalibrationResult result = math.GetCalibrationMatrix(baseRun, m_system.m_balancePos, baseRun, m_system.m_counters, Convert.ToSingle(m_system.m_maxSpeed));
+                // Compute dataset and nofity MainWindow veiw model
+                CalibrationResult result = math.Calibrate(baseRun, m_system.m_balancePos, baseRun, m_system.m_counters, Convert.ToSingle(m_system.m_maxSpeed));
                 m_mainVM.SetCalibrationResult(result);
 
                 // set data to table
-                HistoryData temp = new HistoryData();
+                MeasurementData temp = new MeasurementData();
                 temp.Imbalance = result.ResidualImblance;
                 temp.Speed = result.Speed;
                 temp.SpeedVariation = result.SpeedVariation;
@@ -141,6 +141,12 @@ namespace StaticBalancing
                 temp.StatusCoef = baseRun;
                 temp.RawData = baseIn;
                 temp.BalanceStats = temp.Imbalance > m_mainVM.SelectedModelMaxImba ? BALANCE_STATUS.FAILED : BALANCE_STATUS.SUCCESS;
+
+                temp.WeightMap = new Dictionary<string, double>();
+                foreach(BalancePosition bp in m_system.m_balancePos)
+                {
+                    temp.WeightMap.Add(bp.ID, bp.GetWeight(m_system.m_counters));
+                }
 
                 m_mainVM.HistoryRecord.Add(temp);
                 m_mainVM.CurrentChoseData = temp;

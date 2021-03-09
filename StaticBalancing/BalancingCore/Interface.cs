@@ -1,4 +1,5 @@
-﻿
+﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearRegression;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,7 +23,7 @@ namespace StaticBalancing
         public float MaxStackHeight { get; set; }
         public StackDirection StackDir { get; set; }
         public Dictionary<string, int> Counters { get; set; } // partname, # of counters
-        public SineRegCoef LastRunCoef { get; set; }
+        public SineRegCoef CalibrationRunCoef { get; set; }
 
         public BalancePosition(string id)
         {
@@ -31,7 +32,7 @@ namespace StaticBalancing
             Angle = 0.0F;
             MaxStackHeight = 0.0F;
             StackDir = StackDirection.UNKNOWN;
-            LastRunCoef = new SineRegCoef();
+            CalibrationRunCoef = new SineRegCoef();
             Counters = new Dictionary<string, int>();
         }
 
@@ -173,6 +174,8 @@ namespace StaticBalancing
 
         public SineRegCoef BaseCoef { get; set; }
 
+        public Matrix<double> CalibrationMatrix { get; set; }
+
         public CalibrationResult(string id = "")
         {
             Label = id;
@@ -184,6 +187,7 @@ namespace StaticBalancing
             ResidualImblance = 0.0;
             ForceAtMaxSpeed = 0.0;
             BaseCoef = new SineRegCoef();
+            CalibrationMatrix = Matrix<double>.Build.DenseOfColumnArrays(new double[] { 0 });
         }
 
     } 
@@ -205,7 +209,7 @@ namespace StaticBalancing
     #endregion
 
 
-    public struct HistoryData
+    public struct MeasurementData
     {
         public string Model { get; set; }
 
@@ -224,6 +228,7 @@ namespace StaticBalancing
         public double SpeedVariation { get; set; }
 
         public Dictionary<string, double> DeWeightMap { get; set; }
+        public Dictionary<string, double> WeightMap { get; set; }
 
         public SineRegCoef StatusCoef { get; set; }
 
