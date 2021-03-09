@@ -148,18 +148,21 @@
         </Grid>
 
         <Grid Name="HisotryDataGrid" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="750"/>
-                <ColumnDefinition Width="150"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+            </Grid.RowDefinitions>
+            <Grid Name="BalanceSinusoidPlotGrid" Grid.Row="0">
+                <oxy:PlotView Name ="DataPlotView"/>
+            </Grid>
 
-            <Grid Name="BalancingDataGrid" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="200"/>
-                    <RowDefinition Height="200"/>
-                </Grid.RowDefinitions>
+            <Grid Name="BalancingDataGrid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="750"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
 
-                <Grid Name="BalanceLogGrid" Grid.Row="0">
+                <Grid Name="BalanceLogGrid" Grid.Column="0">
                     <DataGrid SelectionChanged="HistoryResultDataGrid_SelectionChanged" x:Name="HistoryResultDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" Background="White" SelectionUnit="FullRow">
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="SUCCESS_COLOR" Color="LightGreen" />
@@ -176,14 +179,13 @@
 
                     </DataGrid>
                 </Grid>
-
-                <Grid Name="BalanceSinusoidPlotGrid" Grid.Row="1">
-                    <oxy:PlotView Name ="DataPlotView"/>
+                <Grid Name="HistoryDataOperationGrid" Grid.Column="1">
+                    <Button x:Name="MeasureButton" Content="Measure" HorizontalAlignment="Left" Margin="30,58,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
+                    <Button x:Name="LoadButton" Content="Import" HorizontalAlignment="Left" Margin="30,93,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
+                    <Button x:Name="DumpButton" Content="Export" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
+                    <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="30,23,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
                 </Grid>
             </Grid>
-
-            <Grid Name="HistoryDataOperationGrid" Grid.Column="1"/>
-
         </Grid>
 
 

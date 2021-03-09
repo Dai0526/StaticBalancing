@@ -287,6 +287,7 @@ namespace StaticBalancing
             Yaxis.MinorStep = 0.1;
             Yaxis.MajorGridlineStyle = LineStyle.Automatic;
             Yaxis.Title = "Speed (rpm)";
+            Yaxis.IsZoomEnabled = false;
 
             OxyPlot.Axes.LinearAxis Xaxis = new OxyPlot.Axes.LinearAxis
             {
@@ -294,7 +295,8 @@ namespace StaticBalancing
                 Minimum = 0,
                 Maximum = 360,
                 MinorStep = 30,
-                MajorStep = 90
+                MajorStep = 90,
+                IsZoomEnabled = false
             };
 
             Xaxis.Title = "Angle";
