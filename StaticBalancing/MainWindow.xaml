@@ -180,10 +180,10 @@
                     </DataGrid>
                 </Grid>
                 <Grid Name="HistoryDataOperationGrid" Grid.Column="1">
-                    <Button x:Name="MeasureButton" Content="Measure" HorizontalAlignment="Left" Margin="30,58,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
-                    <Button x:Name="LoadButton" Content="Import" HorizontalAlignment="Left" Margin="30,93,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
-                    <Button x:Name="DumpButton" Content="Export" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
-                    <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="30,23,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14"/>
+                    <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="30,23,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" IsEnabled="False" Click="DeleteButton_Click"/>
+                    <Button x:Name="MeasureButton" Content="Measure" HorizontalAlignment="Left" Margin="30,58,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" IsEnabled="False" Click="MeasureButton_Click"/>
+                    <Button x:Name="LoadButton" Content="Import" HorizontalAlignment="Left" Margin="30,93,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="LoadButton_Click"/>
+                    <Button x:Name="DumpButton" Content="Export" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="DumpButton_Click"/>
                 </Grid>
             </Grid>
         </Grid>

@@ -130,27 +130,6 @@ namespace StaticBalancing
 
         }
 
-        // 
-        private void CalibrateButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (m_balancer.m_systemSelected == null)
-            {
-                MessageBox.Show("Please select a system before Calibration", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            CalibrationWindow cw = new CalibrationWindow(ref m_balancer.m_systemSelected, ref mainWindowViewModel);
-            cw.ShowDialog();
-
-            if(mainWindowViewModel.CalibrationStatus == true)
-            {
-                DrawForceVector();
-                UpdateHistoryDataGrid();
-                DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
-            }
-
-        }
-
         private void UpdateHistoryDataGrid()
         {
             HistoryData curr = mainWindowViewModel.CurrentChoseData;
@@ -191,8 +170,6 @@ namespace StaticBalancing
             // update dataview
             HistoryResultDataGrid.ItemsSource = table.DefaultView;
         }
-
-        // highlight color
 
 
         #region Draw Plot Functions
@@ -345,6 +322,49 @@ namespace StaticBalancing
         }
 
         private void HistoryResultDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CalibrateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_balancer.m_systemSelected == null)
+            {
+                MessageBox.Show("Please select a system before Calibration", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            CalibrationWindow cw = new CalibrationWindow(ref m_balancer.m_systemSelected, ref mainWindowViewModel);
+            cw.ShowDialog();
+
+            if (mainWindowViewModel.CalibrationStatus == true)
+            {
+                DrawForceVector();
+                UpdateHistoryDataGrid();
+                DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
+
+                DeleteButton.IsEnabled = true;
+                MeasureButton.IsEnabled = true;
+            }
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MeasureButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DumpButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
