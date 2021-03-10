@@ -57,7 +57,7 @@
                                     <Label x:Name="CTModelValueLabel" Content="{Binding Path=SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
 
                                     <Label x:Name="SerialNumNameLabel" Content="Serial#" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="54" Height="30" FontSize="13" FontWeight="Bold"/>
-                                    <TextBox x:Name="SerialNumValueLabel" Text="" HorizontalAlignment="Left" Margin="234,10,0,0" VerticalAlignment="Top" Width="147" Height="30" TextChanged="SerialNumValueLabel_TextChanged"/>
+                                    <TextBox x:Name="SerialNumValueTextBox" Text="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="234,10,0,0" VerticalAlignment="Top" Width="147" Height="30" TextChanged="SerialNumValueTextBox_TextChanged"/>
 
                                     <Label x:Name="MaxImbaNameLabel" Content="Max.Imbalance" HorizontalAlignment="Left" Margin="5,90,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
                                     <Label x:Name="MaxImbaValueLabel" Content="{Binding Path=SelectedModelMaxImba, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="50" Height="30"/>
@@ -183,11 +183,11 @@
 
                     </DataGrid>
                 </Grid>
-                <Grid Name="HistoryDataOperationGrid" Grid.Column="1">
-                    <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="30,23,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" IsEnabled="False" Click="DeleteButton_Click"/>
-                    <Button x:Name="MeasureButton" Content="Measure" HorizontalAlignment="Left" Margin="30,58,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" IsEnabled="False" Click="MeasureButton_Click"/>
-                    <Button x:Name="LoadButton" Content="Import" HorizontalAlignment="Left" Margin="30,93,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="LoadButton_Click"/>
-                    <Button x:Name="DumpButton" Content="Export" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="DumpButton_Click"/>
+                <Grid Name="HistoryDataOperationGrid" Grid.Column="1" Margin="0,0,-1,0">
+                    <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="30,23,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="DeleteButton_Click"/>
+                    <Button x:Name="MeasureButton" Content="Measure" HorizontalAlignment="Left" Margin="30,58,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="MeasureButton_Click"/>
+                    <Button x:Name="LoadButton" Content="Import" HorizontalAlignment="Left" Margin="30,93,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="ImportButton_Click"/>
+                    <Button x:Name="DumpButton" Content="Export" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="80" Height="30" FontSize="14" Click="ExportButton_Click"/>
                 </Grid>
             </Grid>
         </Grid>

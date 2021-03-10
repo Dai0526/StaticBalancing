@@ -114,7 +114,6 @@ namespace StaticBalancing.ViewModel
         public void SetDisplayedInfo(SystemInfo info)
         {
             SelectedModel = info.m_model;
-            SelectedSerialNumber = info.m_serialNumber;
             SelectedModelMaxImba = info.m_maxImbalance;
             SelectedModelMaxSpeed = info.m_maxSpeed;
             SelectedModelOffset = info.m_homeTickOffset;

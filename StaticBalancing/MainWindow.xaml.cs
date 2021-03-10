@@ -13,6 +13,7 @@ using StaticBalancing.ViewModel;
 using System.Windows.Media.Imaging;
 using System.Data;
 using System.Windows.Controls;
+using System.Text;
 
 namespace StaticBalancing
 {
@@ -26,6 +27,9 @@ namespace StaticBalancing
         private readonly SolidColorBrush COLOR_ERROR = new SolidColorBrush(Colors.Red);
         private readonly SolidColorBrush COLOR_DEFAULT = new SolidColorBrush(Colors.Blue);
         private readonly SolidColorBrush COLOR_SUCCESS = new SolidColorBrush(Colors.Green);
+
+        public string WEIGHT = "Weight";
+        public string WEIGHT_CHANGE = "DeWeight";
 
         // member
         public BalancingCore m_balancer;
@@ -106,7 +110,7 @@ namespace StaticBalancing
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to parse system configuration: " + ex.Data + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -133,7 +137,12 @@ namespace StaticBalancing
         private void UpdateHistoryDataGrid()
         {
             // set up table header
-            MeasurementData curr = mainWindowViewModel.CurrentChoseData;
+            if(mainWindowViewModel.HistoryRecord.Count <=0)
+            {
+                return;
+            }
+
+            MeasurementData curr = mainWindowViewModel.HistoryRecord[0];
 
             DataTable table = new DataTable();
             table.Columns.Add("Timestamp", typeof(string));
@@ -144,17 +153,14 @@ namespace StaticBalancing
             table.Columns.Add("Speed Variation(%)", typeof(double));
             table.Columns.Add("ForceAtMaxSpeed", typeof(double));
 
-            string WEIGHT = "Weight";
-            string WEIGHT_CHANGE = "dWeight";
-
             foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
             {
-                table.Columns.Add(WEIGHT + " " + kv.Key, typeof(double));
+                table.Columns.Add(WEIGHT + "_" + kv.Key, typeof(double));
             }
 
             foreach (KeyValuePair<string, double> kv in curr.DeWeightMap)
             {
-                table.Columns.Add(WEIGHT_CHANGE + " " + kv.Key, typeof(double));
+                table.Columns.Add(WEIGHT_CHANGE + "_" + kv.Key, typeof(double));
             }
 
 
@@ -173,12 +179,12 @@ namespace StaticBalancing
 
                 foreach (KeyValuePair<string, double> kv in hd.DeWeightMap)
                 {
-                    thisRow[WEIGHT_CHANGE + " " + kv.Key] = Math.Round(kv.Value, 6);
+                    thisRow[WEIGHT_CHANGE + "_" + kv.Key] = Math.Round(kv.Value, 6);
                 }
 
                 foreach (KeyValuePair<string, double> kv in hd.WeightMap)
                 {
-                    thisRow[WEIGHT + " " + kv.Key] = Math.Round(kv.Value, 6);
+                    thisRow[WEIGHT + "_" + kv.Key] = Math.Round(kv.Value, 6);
                 }
 
                 table.Rows.Add(thisRow);
@@ -255,7 +261,6 @@ namespace StaticBalancing
             ImbalanceVectorPlotGrid.Children.Add(ForceDiagramPlot);
         }
 
-   
         private void DrawSpeedVerseAngle(MeasurementData data)
         {
             PlotModel model = new PlotModel();
@@ -343,10 +348,7 @@ namespace StaticBalancing
 
         #endregion
 
-        private void SerialNumValueLabel_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            mainWindowViewModel.SelectedSerialNumber = SerialNumValueLabel.Text;
-        }
+
 
         private void HistoryResultDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -428,19 +430,18 @@ namespace StaticBalancing
 
         }
 
-        private void ClearSpeedVsAnglePlot()
-        {
-            PlotModel empty = new PlotModel();
-            empty.Title = "None";
-            DataPlotView.Model = empty;
-        }
-
         private void MeasureButton_Click(object sender, RoutedEventArgs e)
         {
+            if(mainWindowViewModel.CalibrationResult.CalibrationMatrix == null)
+            {
+                MessageBox.Show("Add Measurement Failed. Please finish calibration", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             MeasureWindow mw = new MeasureWindow(ref m_balancer.m_systemSelected, ref mainWindowViewModel);
             mw.ShowDialog();
 
-            if(mw.DialogResult == true)
+            if (mw.DialogResult == true)
             {
                 UpdateHistoryDataGrid();
                 DrawSpeedVerseAngle(mainWindowViewModel.CurrentChoseData);
@@ -448,12 +449,335 @@ namespace StaticBalancing
             }
         }
 
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(mainWindowViewModel.SelectedModel))
+            {
+                MessageBox.Show("Failed. Please select system before load data", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
+            fbd.Title = "Please select a data file to Load";
+            fbd.DefaultExt = "csv";
+            fbd.Filter = "csv files (*.csv)|*.csv";
+            fbd.InitialDirectory = @"C:\";
+            fbd.CheckFileExists = true;
+            fbd.CheckPathExists = true;
+
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    bool loadSuccess = LoadBalancingDataFromFile(fbd.FileName);
+                    if (loadSuccess)
+                    {
+                        UpdateHistoryDataGrid();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Load Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (mainWindowViewModel.HistoryRecord.Count <= 0)
+            {
+                MessageBox.Show("No measurment data found. Nothing to Write.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            saveFileDialog.Filter = "CSV Files (*.csv)|*.csv";
+            saveFileDialog.DefaultExt = "csv";
+            saveFileDialog.AddExtension = true;
+
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    DumpBalancingData(saveFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Dump Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
 
         }
 
-        private void DumpButton_Click(object sender, RoutedEventArgs e)
+
+        private void ClearSpeedVsAnglePlot()
+        {
+            PlotModel empty = new PlotModel();
+            empty.Title = "None";
+            DataPlotView.Model = empty;
+        }
+
+
+        #region dump/load Measurment data
+
+        public string GetMetaHeader(MeasurementData data)
+        {
+            // set hdr
+            StringBuilder hdr = new StringBuilder();
+            hdr.AppendFormat("{0},", "Timestamp");
+            hdr.AppendFormat("{0},", "Imbalance");
+            hdr.AppendFormat("{0},", "Angle");
+            hdr.AppendFormat("{0},", "Speed");
+            hdr.AppendFormat("{0},", "ForceAtMaxSpeed");
+            hdr.AppendFormat("{0},", "SpeedVariation");
+            hdr.AppendFormat("{0}", "Coef");
+
+            int count = 0;
+            foreach (KeyValuePair<string, double> p in data.DeWeightMap)
+            {
+                hdr.AppendFormat(",{0}_{1}", WEIGHT_CHANGE, p.Key);
+                ++count;
+            }
+
+            foreach (KeyValuePair<string, double> p in data.WeightMap)
+            {
+                hdr.AppendFormat(",{0}_{1}", WEIGHT, p.Key);
+                ++count;
+            }
+
+            // set meta
+            StringBuilder meta = new StringBuilder();
+            meta.AppendFormat("{0},{1}\r\n", "Model", mainWindowViewModel.SelectedModel);
+            meta.AppendFormat("{0},{1}\r\n", "Serial", mainWindowViewModel.SelectedSerialNumber);
+            meta.AppendFormat("{0},{1}\r\n", "MaxImbalance", mainWindowViewModel.SelectedModelMaxImba);
+            meta.AppendFormat("{0},{1}\r\n", "HeaderSize", count + 7);
+
+            string header = hdr.ToString();
+            meta.Append(header);
+
+            return meta.ToString();
+        }
+
+        public string GetHistoryRecordString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (MeasurementData data in mainWindowViewModel.HistoryRecord)
+            {
+                sb.AppendFormat("{0},{1},{2},{3},{4},{5},",
+                    data.Timestamp,
+                    data.Imbalance,
+                    data.Angle,
+                    data.Speed,
+                    data.ForceAtMaxSpeed,
+                    data.SpeedVariation);
+                sb.AppendFormat("{0};{1};{2}", data.StatusCoef.A, data.StatusCoef.B, data.StatusCoef.C);
+
+                foreach (KeyValuePair<string, double> p in data.DeWeightMap)
+                {
+                    sb.AppendFormat(",{0}", p.Value);
+                }
+
+                foreach (KeyValuePair<string, double> p in data.WeightMap)
+                {
+                    sb.AppendFormat(",{0}", p.Value);
+                }
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+        private bool LoadBalancingDataFromFile(string path)
+        {
+            string ext = Path.GetExtension(path);
+            if (string.Compare(ext, ".csv", true) != 0)
+            {
+                MessageBox.Show("Please select a csv file.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            StreamReader file = new StreamReader(fs);
+
+            string line = null;
+
+            // check model
+            line = file.ReadLine();
+            string[] item = line.Split(',');
+            if (item.Length != 2) { throw new Exception("Invalid data format."); }
+
+            if (string.Compare(item[0], "Model", true) != 0 || string.Compare(item[1], mainWindowViewModel.SelectedModel, true) != 0)
+            {
+                throw new Exception("Failed to load data. Model not match: " + item[1]);
+            }
+
+            //check serial
+            line = file.ReadLine();
+            item = line.Split(',');
+            if (item.Length != 2) { throw new Exception("Invalid data format."); }
+
+            if (string.Compare(item[0], "Serial", true) != 0 || string.Compare(item[1], mainWindowViewModel.SelectedSerialNumber, true) != 0)
+            {
+                throw new Exception("Failed to load data. Serial Number not match: " + item[1]);
+            }
+
+            // check MaxImbalance
+            line = file.ReadLine();
+            item = line.Split(',');
+            if (item.Length != 2)
+            {
+                throw new Exception("Invalid data format.");
+            }
+            double maxImba = Convert.ToDouble(item[1]);
+            if (string.Compare(item[0], "MaxImbalance", true) != 0 || maxImba != mainWindowViewModel.SelectedModelMaxImba)
+            {
+                throw new Exception("Failed to load data. Max Imbalance not match: " + item[1]);
+            }
+
+
+            // check head line
+            line = file.ReadLine();
+            item = line.Split(',');
+
+            if (string.Compare(item[0], "HeaderSize", true) != 0)
+            {
+                throw new Exception("Failed to load data. The 4th line is not HeaderLength: " + item[1]);
+            }
+
+            int headerCount = Int32.Parse(item[1]);
+
+            // read header
+            if (Convert.ToInt32(item[1]) != headerCount)
+            {
+                throw new Exception("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
+            }
+
+            // get bp name
+            int bpCount = (headerCount - 7) / 2;
+            List<string> bpPosition = new List<string>();
+            line = file.ReadLine();
+            item = line.Split(',');
+
+            for (int i = 7; i < 7 + bpCount; ++i)
+            {
+                string tag = item[i];
+                string[] bp = tag.Split('_');
+
+                if (string.Compare(bp[0], WEIGHT_CHANGE) != 0)
+                {
+                    throw new Exception("Invalid Header format: The 7th header name should be: " + WEIGHT_CHANGE + ". But Actually value is " + bp[0]);
+                }
+                else
+                {
+                    bpPosition.Add(bp[1]);
+                }
+            }
+
+
+            List<MeasurementData> datas = new List<MeasurementData>();
+
+            while ((line = file.ReadLine()) != null)
+            {
+                item = line.Split(',');
+
+                if (item.Length == 1)
+                {
+                    continue;
+                }
+
+                if (item.Length != headerCount)
+                {
+                    throw new Exception("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
+                }
+
+                MeasurementData temp = new MeasurementData();
+                temp.Timestamp = item[0];
+                temp.Imbalance = Convert.ToDouble(item[1]);
+                temp.Angle = Convert.ToDouble(item[2]);
+                temp.Speed = Convert.ToDouble(item[3]);
+                temp.ForceAtMaxSpeed = Convert.ToDouble(item[4]);
+                temp.SpeedVariation = Convert.ToDouble(item[5]);
+
+                // set coef
+                SineRegCoef coef = new SineRegCoef();
+                string[] coefArry = item[6].Split(';');
+
+                coef.A = Convert.ToDouble(coefArry[0]);
+                coef.B = Convert.ToDouble(coefArry[1]);
+                coef.C = Convert.ToDouble(coefArry[2]);
+
+                temp.StatusCoef = coef;
+
+                Dictionary<string, double> dwMap = new Dictionary<string, double>();
+                Dictionary<string, double> wMap = new Dictionary<string, double>();
+
+                for (int i = 0; i < bpPosition.Count; ++i)
+                {
+                    dwMap[bpPosition[i]] = 7 + i;
+                    wMap[bpPosition[i]] = 7 + i + bpCount;
+                }
+
+                temp.DeWeightMap = dwMap;
+                temp.WeightMap = wMap;
+
+                temp.BalanceStats = temp.Imbalance <= maxImba ? BALANCE_STATUS.SUCCESS : BALANCE_STATUS.FAILED;
+
+                datas.Add(temp);
+            }
+
+            foreach (var mdata in datas)
+            {
+                AddHisotryData(mdata);
+            }
+
+            return true;
+        }
+
+        private void AddHisotryData(MeasurementData data)
+        {
+            bool exist = false;
+            foreach (MeasurementData d in mainWindowViewModel.HistoryRecord)
+            {
+                if (string.Compare(d.Timestamp, data.Timestamp) == 0)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+
+            if (exist)
+            {
+                // Already Existed , do not add
+                return;
+            }
+
+            mainWindowViewModel.HistoryRecord.Add(data);
+        }
+
+        private bool DumpBalancingData(string path)
+        {
+            StreamWriter sw = new StreamWriter(path);
+
+            // Write meta
+            string metahdr = GetMetaHeader(mainWindowViewModel.HistoryRecord[0]);
+            sw.WriteLine(metahdr);
+
+            // Create data
+            string data = GetHistoryRecordString();
+            sw.WriteLine(data);
+
+            sw.Close();
+
+            return true;
+        }
+
+        #endregion
+
+        private void SerialNumValueTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
