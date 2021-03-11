@@ -57,7 +57,7 @@ namespace StaticBalancing
 
             // init configuration path
             m_executablePath = Directory.GetCurrentDirectory();
-            string configFilePath = m_executablePath + "\\system.xml"; ;
+            string configFilePath = m_executablePath + "\\Systems.xml";
 
             if (File.Exists(configFilePath))
             {

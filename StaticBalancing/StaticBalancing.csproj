@@ -38,6 +38,9 @@
   <PropertyGroup>
     <StartupObject>StaticBalancing.LoadDll</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Balance.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MathNet.Numerics, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.15.0\lib\net40\MathNet.Numerics.dll</HintPath>
@@ -151,10 +154,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource\MatlabFunc\sinefit.m" />
+    <Resource Include="Resource\Icons\Balance.ico" />
+    <Resource Include="Resource\Images\CTRotorWithAngle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resource\Images\CTRotorWithAngle.png" />
+    <Resource Include="Resource\Documents\Systems.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Balance.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
