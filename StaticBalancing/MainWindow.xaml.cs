@@ -72,8 +72,16 @@ namespace StaticBalancing
 
         private void ConfigFilePathTextbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BrowseConfigurationFile();
+            System.Windows.Forms.DialogResult browsResult = BrowseConfigurationFile();
+
+            if (browsResult == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+
+            LoadBalacingCore();
         }
+
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.DialogResult browsResult = BrowseConfigurationFile();
@@ -82,6 +90,8 @@ namespace StaticBalancing
             {
                 return;
             }
+
+            LoadBalacingCore();
         }
 
         private void LoadBalacingCore()
@@ -227,6 +237,7 @@ namespace StaticBalancing
             ForceDiagramPlot.PlotType = PlotType.Polar;
             ForceDiagramPlot.PlotAreaBorderThickness = new Thickness(0);
             ForceDiagramPlot.PlotMargins = new Thickness(25, 25, 25, 25);
+            ForceDiagramPlot.Title = "Force Diagram";
 
             AngleAxis axis = new AngleAxis();
             axis.Minimum = 0;
