@@ -23,7 +23,7 @@ namespace StaticBalancing
             InitializeComponent();
 
             m_refSystemCore = core;
-            this.DataContext = this;
+            //.DataContext = this;
 
             InitCombobox();
         }

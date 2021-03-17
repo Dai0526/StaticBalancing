@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<SystemInfo>
+    <System>
+        <Model>CT16</Model>
+        <HomeTickOffset>80.0</HomeTickOffset>
+        <MaxImbalance>50.0</MaxImbalance>
+        <MaxSpeed>120</MaxSpeed>
+        <BalancePositionList>
+            <position id = "6Clock" radius = "780.0" angle = "180" maxStackHeight = "200.0" direction = "Axial"/>
+            <position id = "9Clock" radius = "800.0" angle = "270" maxStackHeight = "200.0" direction = "Axial"/>
+        </BalancePositionList>
+        <CounterTypeList>
+            <counter pn = "16-1000" mass = "2.7" thickness = "10"/>
+            <counter pn = "16-1001" mass = "1.2" thickness = "5"/>
+            <counter pn = "16-1002" mass = "0.5" thickness = "1"/>
+            <counter pn = "Calibration" mass = "1.1" thickness = "0"/>
+        </CounterTypeList>
+    </System>
+
+    <System>
+      <Model>CT64</Model>
+      <HomeTickOffset>80.0</HomeTickOffset>
+      <MaxImbalance>50.0</MaxImbalance>
+      <MaxSpeed>180</MaxSpeed>
+      <BalancePositionList>
+            <position id = "6Clock" radius = "780.0" angle = "180" maxStackHeight = "200.0" direction = "Axial"/>
+            <position id = "9Clock" radius = "800.0" angle = "270" maxStackHeight = "200.0" direction = "Axial"/>
+      </BalancePositionList>
+      <CounterTypeList>
+            <counter pn = "16-1000" mass = "2.7" thickness = "10"/>          
+            <counter pn = "16-1001" mass = "1.2" thickness = "5"/>
+            <counter pn = "16-1002" mass = "0.5" thickness = "1"/>
+            <counter pn = "Calibration" mass = "1.1" thickness = "0"/>
+      </CounterTypeList>
+    </System>
+
+ 
+    <System>
+      <Model>CT256</Model>
+      <HomeTickOffset>18.0</HomeTickOffset>
+      <MaxImbalance>572.9</MaxImbalance>
+      <MaxSpeed>240</MaxSpeed>
+      <BalancePositionList>
+            <position id = "5Clock" radius = "830.0" angle = "165" maxStackHeight = "100.0" direction = "Radial-"/>
+            <position id = "7Clock" radius = "830.0" angle = "195" maxStackHeight = "100.0" direction = "Radial-"/>
+      </BalancePositionList>
+      <CounterTypeList>
+            <counter pn = "16-3241" mass = "1.7" thickness = "6"/>          
+            <counter pn = "16-3242" mass = "0.7" thickness = "3"/>
+            <counter pn = "16-4282" mass = "0.3" thickness = "1"/>
+            <counter pn = "16-4283" mass = "10.2" thickness = "1"/>
+      </CounterTypeList>
+    </System> 
+ 
+</SystemInfo>

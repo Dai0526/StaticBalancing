@@ -76,6 +76,24 @@ namespace StaticBalancing
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             BrowseConfigurationFile();
+
+            if (!File.Exists(mainWindowViewModel.SystemConfigFile))
+            {
+                MessageBox.Show("System Configuraton file doesn't exist: " + mainWindowViewModel.SystemConfigFile + ". Please verify the file location.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                m_balancer = new BalancingCore();
+                m_balancer.ReadSystemInfoFiles(mainWindowViewModel.SystemConfigFile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
         }
 
         private void BrowseConfigurationFile()
@@ -97,23 +115,6 @@ namespace StaticBalancing
         // TODO: pop up a windows, display info from the configuraiton file, and let user to select target system and enter serial numbers
         private void SystemSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(mainWindowViewModel.SystemConfigFile))
-            {
-                MessageBox.Show("System Configuraton file doesn't exist: " + mainWindowViewModel.SystemConfigFile + ". Please verify the file location.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            try
-            {
-                m_balancer = new BalancingCore();
-                m_balancer.ReadSystemInfoFiles(mainWindowViewModel.SystemConfigFile);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
             SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
             ssw.ShowDialog();
 
