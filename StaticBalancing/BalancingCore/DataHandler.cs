@@ -22,7 +22,7 @@ namespace StaticBalancing
             // choose a data reader by file extension
             string ext = Path.GetExtension(path);
 
-            if(string.Compare(".csv", ext, true) != 0 && string.Compare(".csv", ext, true) != 0)
+            if(string.Compare(".csv", ext, true) != 0 && string.Compare(".txt", ext, true) != 0)
             {
                 throw new Exception("Error: Data file extensions not support. Expected .csv and .txt, but actual extension is " + ext);
             }

@@ -100,7 +100,7 @@ namespace StaticBalancing
                 Arithmetic math = new Arithmetic();
 
                 CalibrationData baseData = m_caliViewModel.CalibrationDataSet[0];
-                InputRaw baseIn = dh.LoadDataFromCSV(baseData.InputDataPath);
+                InputRaw baseIn = dh.LoadData(baseData.InputDataPath);
                 SineRegCoef baseRun = math.GetRegressionCoef(baseIn);
 
                 // it shoule be sequential
@@ -156,7 +156,7 @@ namespace StaticBalancing
             catch (Exception ex)
             {
                 m_mainVM.CalibrationStatus = false;
-                MessageBox.Show("Fail to Calibrate: " + ex.Data, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fail to Calibrate: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.Close();
