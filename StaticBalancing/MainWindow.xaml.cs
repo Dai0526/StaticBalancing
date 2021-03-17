@@ -132,7 +132,6 @@ namespace StaticBalancing
             SystemInfo selected = m_balancer.m_systemSelected;
 
             mainWindowViewModel.SetDisplayedInfo(selected);
-
         }
 
         private void UpdateHistoryDataGrid()
