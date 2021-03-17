@@ -62,6 +62,7 @@ namespace StaticBalancing
             if (File.Exists(configFilePath))
             {
                 mainWindowViewModel.SystemConfigFile = configFilePath;
+                LoadBalacingCore();
             }
 
             // init status bar
@@ -75,8 +76,16 @@ namespace StaticBalancing
         }
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
-            BrowseConfigurationFile();
+            System.Windows.Forms.DialogResult browsResult = BrowseConfigurationFile();
 
+            if(browsResult == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        private void LoadBalacingCore()
+        {
             if (!File.Exists(mainWindowViewModel.SystemConfigFile))
             {
                 MessageBox.Show("System Configuraton file doesn't exist: " + mainWindowViewModel.SystemConfigFile + ". Please verify the file location.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -93,10 +102,9 @@ namespace StaticBalancing
                 MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
         }
 
-        private void BrowseConfigurationFile()
+        private System.Windows.Forms.DialogResult BrowseConfigurationFile()
         {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select the configuration file";
@@ -109,12 +117,21 @@ namespace StaticBalancing
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 mainWindowViewModel.SystemConfigFile = fbd.FileName;
+                return System.Windows.Forms.DialogResult.OK;
             }
+
+            return System.Windows.Forms.DialogResult.Cancel;
         }
 
-        // TODO: pop up a windows, display info from the configuraiton file, and let user to select target system and enter serial numbers
+        // TODO: pop up a window, display info from the configuraiton file, and let user to select target system and enter serial numbers
         private void SystemSelectButton_Click(object sender, RoutedEventArgs e)
         {
+            if(m_balancer == null || string.IsNullOrEmpty(mainWindowViewModel.SystemConfigFile))
+            {
+                MessageBox.Show("Please use Browse Button to set the system cofiguration file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
             ssw.ShowDialog();
 
@@ -214,8 +231,8 @@ namespace StaticBalancing
             AngleAxis axis = new AngleAxis();
             axis.Minimum = 0;
             axis.Maximum = 360;
-            axis.StartAngle = 0;
-            axis.EndAngle = 360;
+            axis.StartAngle = 90;
+            axis.EndAngle = -270;
             axis.MajorStep = 30;
             axis.MinorStep = 15;
             axis.Title = "Angle";
