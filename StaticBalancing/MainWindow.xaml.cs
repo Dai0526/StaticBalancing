@@ -34,13 +34,12 @@ namespace StaticBalancing
         // member
         public BalancingCore m_balancer;
         public SystemInfo m_selectedSystem;
-        public Arithmetic m_balanceCalculator;
 
         // path
         private string m_executablePath;
 
         // view model
-        static MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+        static MainWindowViewModel mainWindowViewModel;
 
         // for time elapsed status bar
         private DispatcherTimer m_dispatcherTimer;
@@ -53,9 +52,9 @@ namespace StaticBalancing
 
         private void InitBalancing()
         {
+            mainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mainWindowViewModel;
 
-            // init configuration path
             m_executablePath = Directory.GetCurrentDirectory();
             string configFilePath = m_executablePath + "\\Systems.xml";
 
@@ -67,7 +66,7 @@ namespace StaticBalancing
 
             // init status bar
             InitStatusTimer();
-            SetStatus("Applicatio Started", COLOR_SUCCESS);
+            SetStatus("Application Started", COLOR_SUCCESS);
         }
 
         private void ConfigFilePathTextbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -143,9 +142,45 @@ namespace StaticBalancing
             }
 
             SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
-            ssw.ShowDialog();
+            var result =  ssw.ShowDialog();
 
-            DisplaySelectSystem();
+            if (result.Value == true)
+            {
+                ResetGUI();
+                DisplaySelectSystem();
+            }
+            
+        }
+
+        private void ResetGUI()
+        {
+            // reset calibrationd ata
+            mainWindowViewModel.CalibrationResult = new CalibrationResult();
+
+            // reset force diagram
+            if (ImbalanceVectorPlotGrid.Children.Count != 0)
+            {
+                ImbalanceVectorPlotGrid.Children.Clear();
+                mainWindowViewModel.ForceVectors.Clear();
+                ForceVectorDataGrid.Items.Refresh();
+            }
+
+            // clean history data grid
+            if(HistoryResultDataGrid.ItemsSource != null)
+            {
+                HistoryResultDataGrid.ItemsSource = null;
+                mainWindowViewModel.HistoryRecord.Clear();
+                UpdateHistoryDataGrid();
+            }
+
+            // rest data plot view
+            if(DataPlotView.Model != null)
+            {
+                DataPlotView.Model = null;
+            }
+
+            // reset serial number
+            mainWindowViewModel.SelectedSerialNumber = string.Empty;
         }
 
         private void DisplaySelectSystem()
@@ -230,6 +265,11 @@ namespace StaticBalancing
             foreach(ForceVector fv in fs)
             {
                 maxMag = Math.Max(Math.Abs(fv.Imbalance), maxMag);
+            }
+
+            if(maxMag <= 0)
+            {
+                maxMag = 5;
             }
 
             // Set OxyPlot Model attributes

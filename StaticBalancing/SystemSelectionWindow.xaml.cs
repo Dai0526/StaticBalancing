@@ -23,8 +23,6 @@ namespace StaticBalancing
             InitializeComponent();
 
             m_refSystemCore = core;
-            //.DataContext = this;
-
             InitCombobox();
         }
 
@@ -52,11 +50,13 @@ namespace StaticBalancing
         {
             string selectedItem = ((ComboBoxItem)SystemSelectionCbx.SelectedItem).Content.ToString();
             m_refSystemCore.SetCurrentSystem(selectedItem);
+            this.DialogResult = true;
             this.Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
 

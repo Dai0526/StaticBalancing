@@ -31,7 +31,7 @@ namespace StaticBalancing
 
             m_system = selected;
             m_mainVM = mwvm;
-
+            m_mainVM.CalibrationStatus = false;
             InitDisplayInfo();
         }
 
@@ -152,6 +152,7 @@ namespace StaticBalancing
                 m_mainVM.CurrentChoseData = temp;
 
                 this.DialogResult = true;
+                m_mainVM.CalibrationStatus = true;
             }
             catch (Exception ex)
             {
@@ -176,6 +177,7 @@ namespace StaticBalancing
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
