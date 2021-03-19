@@ -36,7 +36,7 @@ namespace StaticBalancing
         public SystemInfo m_selectedSystem;
 
         // path
-        private string m_executablePath;
+        private string m_executablePath = @"C:\";
 
         // view model
         static MainWindowViewModel mainWindowViewModel;
@@ -119,7 +119,7 @@ namespace StaticBalancing
             fbd.Title = "Please select the configuration file";
             fbd.DefaultExt = "xml";
             fbd.Filter = "xml files (*.xml)|*.xml";
-            fbd.InitialDirectory = @"C:\";
+            fbd.InitialDirectory = @m_executablePath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -536,7 +536,7 @@ namespace StaticBalancing
             fbd.Title = "Please select a data file to Load";
             fbd.DefaultExt = "csv";
             fbd.Filter = "csv files (*.csv)|*.csv";
-            fbd.InitialDirectory = @"C:\";
+            fbd.InitialDirectory = @m_executablePath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 

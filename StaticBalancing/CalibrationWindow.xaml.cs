@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using StaticBalancing;
 using StaticBalancing.ViewModel;
+using System.IO;
 
 namespace StaticBalancing
 {
@@ -19,6 +17,8 @@ namespace StaticBalancing
         MainWindowViewModel m_mainVM;
         SystemInfo m_system;
 
+        string m_defaultFileBrowsePath = @"C:\";
+
         public CalibrationWindow()
         {
             InitializeComponent();
@@ -26,7 +26,6 @@ namespace StaticBalancing
 
         public CalibrationWindow(ref SystemInfo selected, ref MainWindowViewModel mwvm)
         {
-
             InitializeComponent();
 
             m_system = selected;
@@ -184,7 +183,7 @@ namespace StaticBalancing
         {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select Input Data File";
-            fbd.InitialDirectory = @"C:\";
+            fbd.InitialDirectory = @m_defaultFileBrowsePath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -196,6 +195,7 @@ namespace StaticBalancing
                     if (data.BalancePosition == myTag)
                     {
                         data.InputDataPath = fbd.FileName;
+                        m_defaultFileBrowsePath = Path.GetDirectoryName(fbd.FileName);
                     }
                 }
             }
