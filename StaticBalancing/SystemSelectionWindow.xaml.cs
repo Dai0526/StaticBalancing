@@ -48,8 +48,22 @@ namespace StaticBalancing
 
         private void SetButton_Click(object sender, RoutedEventArgs e)
         {
+            
+            if(m_refSystemCore.m_systemSelected != null)
+            {
+                // new selection found, ask if erase
+                MessageBoxResult res = MessageBox.Show("It will erase the previous selection and record. Do you want to Continue?", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (res == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+
+            }
+
+            // if there is no selection, or there is a selection but erase confirmed, then set selection
             string selectedItem = ((ComboBoxItem)SystemSelectionCbx.SelectedItem).Content.ToString();
             m_refSystemCore.SetCurrentSystem(selectedItem);
+
             this.DialogResult = true;
             this.Close();
         }
