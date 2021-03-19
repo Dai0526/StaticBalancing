@@ -57,7 +57,7 @@
                                     <Label x:Name="CTModelValueLabel" Content="{Binding Path=SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
 
                                     <Label x:Name="SerialNumNameLabel" Content="Serial#" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="54" Height="30" FontSize="13" FontWeight="Bold"/>
-                                    <TextBox x:Name="SerialNumValueTextBox" Text="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="234,10,0,0" VerticalAlignment="Top" Width="147" Height="30" TextChanged="SerialNumValueTextBox_TextChanged"/>
+                                    <TextBox x:Name="SerialNumValueTextBox" Text="{Binding Path=SelectedSerialNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="234,10,0,0" VerticalAlignment="Top" Width="147" Height="30" TextChanged="SerialNumValueTextBox_TextChanged" IsEnabled="True"/>
 
                                     <Label x:Name="MaxImbaNameLabel" Content="Max.Imbalance" HorizontalAlignment="Left" Margin="5,90,0,0" VerticalAlignment="Top" Width="105" Height="30" FontSize="13" FontWeight="Bold"/>
                                     <Label x:Name="MaxImbaValueLabel" Content="{Binding Path=SelectedModelMaxImba, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="50" Height="30"/>

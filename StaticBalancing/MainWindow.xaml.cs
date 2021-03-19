@@ -142,12 +142,13 @@ namespace StaticBalancing
             }
 
             SystemSelectionWindow ssw = new SystemSelectionWindow(ref m_balancer);
-            var result =  ssw.ShowDialog();
+            var result =  ssw.ShowDialog(); //bool?
 
             if (result.Value == true)
             {
                 ResetGUI();
                 DisplaySelectSystem();
+                SerialNumValueTextBox.IsEnabled = true;
             }
             
         }
@@ -525,6 +526,12 @@ namespace StaticBalancing
                 return;
             }
 
+            if (string.IsNullOrEmpty(mainWindowViewModel.SelectedSerialNumber))
+            {
+                MessageBox.Show("Please Enter a serial number to continue Load", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select a data file to Load";
             fbd.DefaultExt = "csv";
@@ -557,6 +564,12 @@ namespace StaticBalancing
             if (mainWindowViewModel.HistoryRecord.Count <= 0)
             {
                 MessageBox.Show("No measurment data found. Nothing to Write.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(mainWindowViewModel.SelectedSerialNumber))
+            {
+                MessageBox.Show("Please Enter a serial number to continue Dump", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
