@@ -56,7 +56,9 @@ namespace StaticBalancing
             mainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mainWindowViewModel;
 
+            // update defulat path
             m_executablePath = Directory.GetCurrentDirectory();
+            m_dumploadPath = m_executablePath;
             string configFilePath = m_executablePath + "\\Systems.xml";
 
             if (File.Exists(configFilePath))
