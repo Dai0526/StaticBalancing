@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using StaticBalancing.ViewModel;
 
@@ -19,6 +18,7 @@ namespace StaticBalancing
         MeasureWindowViewModel m_measureViewModel;
         MainWindowViewModel m_mainVM;
         SystemInfo m_system;
+        string m_defaultFileBrowsePath = @"C:\";
 
         public MeasureWindow()
         {
@@ -28,6 +28,9 @@ namespace StaticBalancing
         public MeasureWindow(ref SystemInfo selected, ref MainWindowViewModel mwvm)
         {
             InitializeComponent();
+
+            // update defulat path
+            m_defaultFileBrowsePath = Directory.GetCurrentDirectory();
 
             m_system = selected;
             m_mainVM = mwvm;
@@ -70,7 +73,7 @@ namespace StaticBalancing
         {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select Input Data File";
-            fbd.InitialDirectory = @"C:\";
+            fbd.InitialDirectory = @m_defaultFileBrowsePath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -142,10 +145,11 @@ namespace StaticBalancing
 
                 this.DialogResult = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 m_mainVM.CalibrationStatus = false;
-                MessageBox.Show("Fail to Add Measurement: " + ex.Data, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Fail to Add Measurement: " + ex.Tostring(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fail to Add Measurement. Invalid History data file format.","Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.Close();

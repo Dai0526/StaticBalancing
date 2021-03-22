@@ -109,9 +109,10 @@ namespace StaticBalancing
                 m_balancer = new BalancingCore();
                 m_balancer.ReadSystemInfoFiles(mainWindowViewModel.SystemConfigFile);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Failed to parse system configuration: " + ex.ToString() + ". Please check file format. ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to parse system configuration. Please check file format.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
@@ -441,6 +442,12 @@ namespace StaticBalancing
 
         private void CalibrateButton_Click(object sender, RoutedEventArgs e)
         {
+            if(m_balancer == null)
+            {
+                MessageBox.Show("Please set System Configuration File path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (m_balancer.m_systemSelected == null)
             {
                 MessageBox.Show("Please select a system before Calibration", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -536,7 +543,7 @@ namespace StaticBalancing
             fbd.Title = "Please select a data file to Load";
             fbd.DefaultExt = "csv";
             fbd.Filter = "csv files (*.csv)|*.csv";
-            fbd.InitialDirectory = m_dumploadPath;
+            fbd.InitialDirectory = @m_dumploadPath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -551,9 +558,10 @@ namespace StaticBalancing
                         UpdateWorkingDirectory(ref m_dumploadPath, fbd.FileName);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show("Load Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Load Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Load Data Failed. Please Check data format.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
             }
@@ -587,9 +595,10 @@ namespace StaticBalancing
                     DumpBalancingData(saveFileDialog.FileName);
                     UpdateWorkingDirectory(ref m_dumploadPath, saveFileDialog.FileName);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show("Dump Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Dump Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Dump Data Failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
             }

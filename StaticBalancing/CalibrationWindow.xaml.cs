@@ -16,7 +16,6 @@ namespace StaticBalancing
         CalibrationViewModel m_caliViewModel;
         MainWindowViewModel m_mainVM;
         SystemInfo m_system;
-
         string m_defaultFileBrowsePath = @"C:\";
 
         public CalibrationWindow()
@@ -32,6 +31,9 @@ namespace StaticBalancing
             m_mainVM = mwvm;
             m_mainVM.CalibrationStatus = false;
             InitDisplayInfo();
+
+            // update defulat path
+            m_defaultFileBrowsePath = Directory.GetCurrentDirectory();
         }
 
         private void InitDisplayInfo()
