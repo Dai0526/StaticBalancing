@@ -48,7 +48,7 @@ namespace StaticBalancing
 
         private void SetButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             if(m_refSystemCore.m_systemSelected != null)
             {
                 // new selection found, ask if erase
@@ -57,7 +57,6 @@ namespace StaticBalancing
                 {
                     return;
                 }
-
             }
 
             // if there is no selection, or there is a selection but erase confirmed, then set selection

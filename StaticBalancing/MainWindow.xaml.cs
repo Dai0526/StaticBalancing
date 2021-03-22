@@ -37,6 +37,7 @@ namespace StaticBalancing
 
         // path
         private string m_executablePath = @"C:\";
+        private string m_dumploadPath = @"C:\";
 
         // view model
         static MainWindowViewModel mainWindowViewModel;
@@ -413,10 +414,7 @@ namespace StaticBalancing
             m_dispatcherTimer.IsEnabled = false;
         }
 
-
-
         #endregion
-
 
 
         private void HistoryResultDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -536,7 +534,7 @@ namespace StaticBalancing
             fbd.Title = "Please select a data file to Load";
             fbd.DefaultExt = "csv";
             fbd.Filter = "csv files (*.csv)|*.csv";
-            fbd.InitialDirectory = @m_executablePath;
+            fbd.InitialDirectory = m_dumploadPath;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -548,6 +546,7 @@ namespace StaticBalancing
                     if (loadSuccess)
                     {
                         UpdateHistoryDataGrid();
+                        UpdateWorkingDirectory(ref m_dumploadPath, fbd.FileName);
                     }
                 }
                 catch (Exception ex)
@@ -576,6 +575,7 @@ namespace StaticBalancing
             System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             saveFileDialog.Filter = "CSV Files (*.csv)|*.csv";
             saveFileDialog.DefaultExt = "csv";
+            saveFileDialog.InitialDirectory = @m_dumploadPath;
             saveFileDialog.AddExtension = true;
 
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -583,6 +583,7 @@ namespace StaticBalancing
                 try
                 {
                     DumpBalancingData(saveFileDialog.FileName);
+                    UpdateWorkingDirectory(ref m_dumploadPath, saveFileDialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -601,6 +602,10 @@ namespace StaticBalancing
             DataPlotView.Model = empty;
         }
 
+        private void UpdateWorkingDirectory(ref string src, string target)
+        {
+            src = Path.GetDirectoryName(target);
+        }
 
         #region dump/load Measurment data
 
