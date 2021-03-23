@@ -36,7 +36,7 @@ The entry of dumped file has 3 parts:
 2. MetaInfo
 3. Data
 
-The first 3 row will be header info: \
+The first 3 row will be header info: 
 | Key               | Value          |
 |-------------------|----------------|
 | Model             | CT123          |
@@ -68,5 +68,5 @@ Please refer to the sample data [Data Sample](https://github.com/Dai0526/StaticB
 ## Reference
 
 #### Links
-[Taskboard](https://trello.com/b/YZb9DfgL/static-balancing-tool) 
+[Taskboard](https://trello.com/b/YZb9DfgL/static-balancing-tool) \
 [Design Doc](https://drive.google.com/drive/folders/1EheOILpD6LkiA7-EsfP2dNUdGCXV8nhQ?usp=sharing)
