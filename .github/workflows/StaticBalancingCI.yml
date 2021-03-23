@@ -70,7 +70,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1
     
     - name: Setup NuGet.exe for use with actions
-    - uses: nuget/setup-nuget@v1
+      uses: nuget/setup-nuget@v1
       with:
         nuget-api-key: ${{ secrets.NuGetAPIKey }}
         nuget-version: latest
