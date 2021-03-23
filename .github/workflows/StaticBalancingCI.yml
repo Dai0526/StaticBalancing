@@ -72,10 +72,10 @@ jobs:
         dotnet-version: 5.0.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    # Build
     - name: Restore the application
       run: msbuild $env:Solution_Name /p:Configuration=$env:Configuration
       env:
