@@ -18,7 +18,6 @@ namespace StaticBalancing
         MeasureWindowViewModel m_measureViewModel;
         MainWindowViewModel m_mainVM;
         SystemInfo m_system;
-        string m_defaultFileBrowsePath = @"C:\";
 
         public MeasureWindow()
         {
@@ -28,9 +27,6 @@ namespace StaticBalancing
         public MeasureWindow(ref SystemInfo selected, ref MainWindowViewModel mwvm)
         {
             InitializeComponent();
-
-            // update defulat path
-            m_defaultFileBrowsePath = Directory.GetCurrentDirectory();
 
             m_system = selected;
             m_mainVM = mwvm;
@@ -73,13 +69,14 @@ namespace StaticBalancing
         {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select Input Data File";
-            fbd.InitialDirectory = @m_defaultFileBrowsePath;
+            fbd.InitialDirectory = @m_mainVM.LastVisitedDirectory;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 DataPathTextbox.Text = fbd.FileName;
+                m_mainVM.UpdateWorkingDirectory(fbd.FileName);
             }
         }
 

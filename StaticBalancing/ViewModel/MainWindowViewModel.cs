@@ -212,5 +212,22 @@ namespace StaticBalancing.ViewModel
             }
         }
 
+
+        // direcoty path
+        private string lastVisistedDirecoty = @"C:\";
+        public string LastVisitedDirectory
+        {
+            get { return lastVisistedDirecoty; }
+            set
+            {
+                lastVisistedDirecoty = value;
+                OnPropertyChanged(nameof(LastVisitedDirectory));
+            }
+        }
+
+        public void UpdateWorkingDirectory(string path)
+        {
+            LastVisitedDirectory = System.IO.Path.GetDirectoryName(path);  
+        }
     }
 }

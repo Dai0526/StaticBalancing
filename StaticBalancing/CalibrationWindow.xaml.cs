@@ -16,7 +16,6 @@ namespace StaticBalancing
         CalibrationViewModel m_caliViewModel;
         MainWindowViewModel m_mainVM;
         SystemInfo m_system;
-        string m_defaultFileBrowsePath = @"C:\";
 
         public CalibrationWindow()
         {
@@ -32,8 +31,6 @@ namespace StaticBalancing
             m_mainVM.CalibrationStatus = false;
             InitDisplayInfo();
 
-            // update defulat path
-            m_defaultFileBrowsePath = Directory.GetCurrentDirectory();
         }
 
         private void InitDisplayInfo()
@@ -185,7 +182,7 @@ namespace StaticBalancing
         {
             System.Windows.Forms.OpenFileDialog fbd = new System.Windows.Forms.OpenFileDialog();
             fbd.Title = "Please select Input Data File";
-            fbd.InitialDirectory = @m_defaultFileBrowsePath;
+            fbd.InitialDirectory = @m_mainVM.LastVisitedDirectory;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -197,7 +194,7 @@ namespace StaticBalancing
                     if (data.BalancePosition == myTag)
                     {
                         data.InputDataPath = fbd.FileName;
-                        m_defaultFileBrowsePath = Path.GetDirectoryName(fbd.FileName);
+                        m_mainVM.UpdateWorkingDirectory(fbd.FileName);
                     }
                 }
             }

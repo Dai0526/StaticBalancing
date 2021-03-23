@@ -37,7 +37,6 @@ namespace StaticBalancing
 
         // path
         private string m_executablePath = @"C:\";
-        private string m_dumploadPath = @"C:\";
 
         // view model
         static MainWindowViewModel mainWindowViewModel;
@@ -58,7 +57,7 @@ namespace StaticBalancing
 
             // update defulat path
             m_executablePath = Directory.GetCurrentDirectory();
-            m_dumploadPath = m_executablePath;
+            mainWindowViewModel.LastVisitedDirectory = m_executablePath;
             string configFilePath = m_executablePath + "\\Systems.xml";
 
             if (File.Exists(configFilePath))
@@ -206,6 +205,7 @@ namespace StaticBalancing
             // set up table header
             if(mainWindowViewModel.HistoryRecord.Count <=0)
             {
+                HistoryResultDataGrid.ItemsSource = null;
                 return;
             }
 
@@ -258,6 +258,8 @@ namespace StaticBalancing
             }
 
             // update dataview
+            //HistoryResultDataGrid.ItemsSource = table.DefaultView;
+            HistoryResultDataGrid.ItemsSource = null;
             HistoryResultDataGrid.ItemsSource = table.DefaultView;
         }
 
@@ -543,7 +545,7 @@ namespace StaticBalancing
             fbd.Title = "Please select a data file to Load";
             fbd.DefaultExt = "csv";
             fbd.Filter = "csv files (*.csv)|*.csv";
-            fbd.InitialDirectory = @m_dumploadPath;
+            fbd.InitialDirectory = mainWindowViewModel.LastVisitedDirectory;
             fbd.CheckFileExists = true;
             fbd.CheckPathExists = true;
 
@@ -555,7 +557,7 @@ namespace StaticBalancing
                     if (loadSuccess)
                     {
                         UpdateHistoryDataGrid();
-                        UpdateWorkingDirectory(ref m_dumploadPath, fbd.FileName);
+                        mainWindowViewModel.UpdateWorkingDirectory(fbd.FileName);
                     }
                 }
                 catch (Exception)
@@ -585,7 +587,7 @@ namespace StaticBalancing
             System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             saveFileDialog.Filter = "CSV Files (*.csv)|*.csv";
             saveFileDialog.DefaultExt = "csv";
-            saveFileDialog.InitialDirectory = @m_dumploadPath;
+            saveFileDialog.InitialDirectory = @mainWindowViewModel.LastVisitedDirectory;
             saveFileDialog.AddExtension = true;
 
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -593,7 +595,7 @@ namespace StaticBalancing
                 try
                 {
                     DumpBalancingData(saveFileDialog.FileName);
-                    UpdateWorkingDirectory(ref m_dumploadPath, saveFileDialog.FileName);
+                    mainWindowViewModel.UpdateWorkingDirectory(saveFileDialog.FileName);
                 }
                 catch (Exception)
                 {
@@ -611,11 +613,6 @@ namespace StaticBalancing
             PlotModel empty = new PlotModel();
             empty.Title = "None";
             DataPlotView.Model = empty;
-        }
-
-        private void UpdateWorkingDirectory(ref string src, string target)
-        {
-            src = Path.GetDirectoryName(target);
         }
 
         #region dump/load Measurment data
