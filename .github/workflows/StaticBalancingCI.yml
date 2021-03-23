@@ -69,9 +69,11 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
     
-    # set up Nuget
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.2
+    - name: Setup NuGet.exe for use with actions
+    - uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.NuGetAPIKey }}
+        nuget-version: latest
       
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
