@@ -560,12 +560,18 @@ namespace StaticBalancing
                         mainWindowViewModel.UpdateWorkingDirectory(fbd.FileName);
                     }
                 }
+                catch(FMIBalanceException bex)
+                {
+                    MessageBox.Show("Load Data Failed. \r\n" + bex.GetDetail(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 catch (Exception)
                 {
                     //MessageBox.Show("Load Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    MessageBox.Show("Load Data Failed. Please Check data format.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Load Data Failed. Please check if CT modle and serial number is correct.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
             }
         }
 
@@ -600,7 +606,7 @@ namespace StaticBalancing
                 catch (Exception)
                 {
                     //MessageBox.Show("Dump Data Failed: " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    MessageBox.Show("Dump Data Failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Dump Data Failed. Unknown Error.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
             }
@@ -690,8 +696,7 @@ namespace StaticBalancing
             string ext = Path.GetExtension(path);
             if (string.Compare(ext, ".csv", true) != 0)
             {
-                MessageBox.Show("Please select a csv file.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                throw new FMIBalanceException("Please select a csv file");
             }
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -702,21 +707,21 @@ namespace StaticBalancing
             // check model
             line = file.ReadLine();
             string[] item = line.Split(',');
-            if (item.Length != 2) { throw new Exception("Invalid data format."); }
+            if (item.Length != 2) { throw new FMIBalanceException("Invalid data format."); }
 
             if (string.Compare(item[0], "Model", true) != 0 || string.Compare(item[1], mainWindowViewModel.SelectedModel, true) != 0)
             {
-                throw new Exception("Failed to load data. Model not match: " + item[1]);
+                throw new FMIBalanceException("Failed to load data. Model not match: " + item[1]);
             }
 
             //check serial
             line = file.ReadLine();
             item = line.Split(',');
-            if (item.Length != 2) { throw new Exception("Invalid data format."); }
+            if (item.Length != 2) { throw new FMIBalanceException("Invalid data format."); }
 
             if (string.Compare(item[0], "Serial", true) != 0 || string.Compare(item[1], mainWindowViewModel.SelectedSerialNumber, true) != 0)
             {
-                throw new Exception("Failed to load data. Serial Number not match: " + item[1]);
+                throw new FMIBalanceException("Failed to load data. Serial Number not match: " + item[1]);
             }
 
             // check MaxImbalance
@@ -724,12 +729,13 @@ namespace StaticBalancing
             item = line.Split(',');
             if (item.Length != 2)
             {
-                throw new Exception("Invalid data format.");
+                throw new FMIBalanceException("Invalid data format.");
             }
+
             double maxImba = Convert.ToDouble(item[1]);
             if (string.Compare(item[0], "MaxImbalance", true) != 0 || maxImba != mainWindowViewModel.SelectedModelMaxImba)
             {
-                throw new Exception("Failed to load data. Max Imbalance not match: " + item[1]);
+                throw new FMIBalanceException("Failed to load data. Max Imbalance not match: " + item[1]);
             }
 
 
@@ -739,7 +745,7 @@ namespace StaticBalancing
 
             if (string.Compare(item[0], "HeaderSize", true) != 0)
             {
-                throw new Exception("Failed to load data. The 4th line is not HeaderLength: " + item[1]);
+                throw new FMIBalanceException("Failed to load data. The 4th line is not HeaderLength: " + item[1]);
             }
 
             int headerCount = Int32.Parse(item[1]);
@@ -747,7 +753,7 @@ namespace StaticBalancing
             // read header
             if (Convert.ToInt32(item[1]) != headerCount)
             {
-                throw new Exception("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
+                throw new FMIBalanceException("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
             }
 
             // get bp name
@@ -763,7 +769,7 @@ namespace StaticBalancing
 
                 if (string.Compare(bp[0], WEIGHT_CHANGE) != 0)
                 {
-                    throw new Exception("Invalid Header format: The 7th header name should be: " + WEIGHT_CHANGE + ". But Actually value is " + bp[0]);
+                    throw new FMIBalanceException("Invalid Header format: The 7th header name should be: " + WEIGHT_CHANGE + ". But Actually value is " + bp[0]);
                 }
                 else
                 {
@@ -785,7 +791,7 @@ namespace StaticBalancing
 
                 if (item.Length != headerCount)
                 {
-                    throw new Exception("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
+                    throw new FMIBalanceException("Invalid Data format: Header size not match. Expected = " + headerCount + ", actual get = " + item.Length);
                 }
 
                 MeasurementData temp = new MeasurementData();
